@@ -81,13 +81,9 @@ Public Class Form1
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e _
     As System.EventArgs) Handles MyBase.Load
-        LinkLabel1.Text = "Beaverhouse Discord"
         LinkLabel1.Links.Add(0, 19, "http://bit.ly/Beavercord")
-        LinkLabel2.Text = "The BioMedia Project"
         LinkLabel2.Links.Add(0, 20, "http://biomediaproject.com/bmp")
-        LinkLabel3.Text = "Beaverhouse YouTube"
         LinkLabel3.Links.Add(0, 19, "http://youtube.com/vahkiti")
-        LinkLabel4.Text = "Project Issue Tracker"
         LinkLabel4.Links.Add(0, 21, "https://github.com/TheLegendOfMataNui/game-issues/issues")
     End Sub
 
