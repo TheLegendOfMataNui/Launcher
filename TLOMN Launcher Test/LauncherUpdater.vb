@@ -1,17 +1,14 @@
-﻿Public Class Form4
-    Private Sub Form4_Shown(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Shown
-        Me.Visible = False
-        Me.Hide()
-
+Public Module LauncherUpdater
+    Public Sub DoUpdateCheck()
         '----------------------------------------------------------------
         'Old Version Cleanup
         '----------------------------------------------------------------
 
         Try
             My.Computer.FileSystem.DeleteDirectory("..\LEGO Bionicle\Launcher", FileIO.DeleteDirectoryOption.DeleteAllContents)
-            MyBase.Close()
-        Catch
-            Me.Close()
+            'Form1.Close()
+        Catch ex As Exception
+            'Form1.Close()
         End Try
 
         '----------------------------------------------------------------
@@ -24,7 +21,6 @@
             "Temp\versionL.txt", "", "", True, 1000, True)
 
         Catch
-            Me.Close()
             Exit Sub
         End Try
 
@@ -43,10 +39,8 @@
                    "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/BIONICLE%20Launcher%20Installer.exe",
                    "Temp\BIONICLE Launcher Installer.exe", "", "", True, 1000, True)
                     Process.Start("Temp\BIONICLE Launcher Installer.exe")
-                    MyBase.Close()
                     Form1.Close()
                 Catch
-                    Me.Close()
                 End Try
 
                 '----------------------------------------------------------------
@@ -57,5 +51,6 @@
                 Exit Sub
             End If
         End If
+
     End Sub
-End Class
+End Module
