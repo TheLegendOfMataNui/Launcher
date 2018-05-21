@@ -26,14 +26,10 @@ Partial Class Form1
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
-        Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
         Me.News = New System.Windows.Forms.Panel()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
@@ -74,106 +70,53 @@ Partial Class Form1
         Me.Button3.TabIndex = 3
         Me.Button3.UseVisualStyleBackColor = True
         '
-        'LinkLabel1
-        '
-        Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.BackColor = System.Drawing.Color.Transparent
-        Me.LinkLabel1.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel1.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.LinkDCRD
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.LinkLabel1.Location = New System.Drawing.Point(719, 243)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(154, 14)
-        Me.LinkLabel1.TabIndex = 4
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "                                                 "
-        Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'LinkLabel2
-        '
-        Me.LinkLabel2.AutoSize = True
-        Me.LinkLabel2.BackColor = System.Drawing.Color.Transparent
-        Me.LinkLabel2.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel2.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.LinkBMP
-        Me.LinkLabel2.LinkColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.LinkLabel2.Location = New System.Drawing.Point(719, 151)
-        Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.Size = New System.Drawing.Size(158, 18)
-        Me.LinkLabel2.TabIndex = 5
-        Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "                                                 "
-        Me.LinkLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.LinkLabel2.UseCompatibleTextRendering = True
-        '
-        'LinkLabel3
-        '
-        Me.LinkLabel3.AutoSize = True
-        Me.LinkLabel3.BackColor = System.Drawing.Color.Transparent
-        Me.LinkLabel3.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel3.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.LinkYT
-        Me.LinkLabel3.LinkColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.LinkLabel3.Location = New System.Drawing.Point(719, 336)
-        Me.LinkLabel3.Name = "LinkLabel3"
-        Me.LinkLabel3.Size = New System.Drawing.Size(154, 14)
-        Me.LinkLabel3.TabIndex = 8
-        Me.LinkLabel3.TabStop = True
-        Me.LinkLabel3.Text = "                                                 "
-        Me.LinkLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'PictureBox1
         '
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox1.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.BMPBanner
         Me.PictureBox1.ImageLocation = ""
         Me.PictureBox1.Location = New System.Drawing.Point(719, 94)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(153, 54)
+        Me.PictureBox1.Size = New System.Drawing.Size(153, 86)
         Me.PictureBox1.TabIndex = 9
         Me.PictureBox1.TabStop = False
         '
         'PictureBox2
         '
+        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox2.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox2.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.DCBanner
         Me.PictureBox2.ImageLocation = ""
         Me.PictureBox2.Location = New System.Drawing.Point(719, 186)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(153, 54)
+        Me.PictureBox2.Size = New System.Drawing.Size(153, 87)
         Me.PictureBox2.TabIndex = 10
         Me.PictureBox2.TabStop = False
         '
         'PictureBox3
         '
+        Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox3.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox3.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.BHBanner
         Me.PictureBox3.ImageLocation = ""
         Me.PictureBox3.Location = New System.Drawing.Point(719, 279)
         Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(153, 54)
+        Me.PictureBox3.Size = New System.Drawing.Size(153, 87)
         Me.PictureBox3.TabIndex = 11
         Me.PictureBox3.TabStop = False
         '
         'PictureBox4
         '
+        Me.PictureBox4.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox4.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox4.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.GHBanner
         Me.PictureBox4.ImageLocation = ""
         Me.PictureBox4.Location = New System.Drawing.Point(719, 372)
         Me.PictureBox4.Name = "PictureBox4"
-        Me.PictureBox4.Size = New System.Drawing.Size(153, 54)
+        Me.PictureBox4.Size = New System.Drawing.Size(153, 87)
         Me.PictureBox4.TabIndex = 12
         Me.PictureBox4.TabStop = False
-        '
-        'LinkLabel4
-        '
-        Me.LinkLabel4.AutoSize = True
-        Me.LinkLabel4.BackColor = System.Drawing.Color.Transparent
-        Me.LinkLabel4.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel4.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.LinkGit
-        Me.LinkLabel4.LinkColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.LinkLabel4.Location = New System.Drawing.Point(719, 429)
-        Me.LinkLabel4.Name = "LinkLabel4"
-        Me.LinkLabel4.Size = New System.Drawing.Size(154, 14)
-        Me.LinkLabel4.TabIndex = 13
-        Me.LinkLabel4.TabStop = True
-        Me.LinkLabel4.Text = "                                                 "
-        Me.LinkLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'News
         '
@@ -214,14 +157,10 @@ Partial Class Form1
         Me.Controls.Add(Me.PictureBox5)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.LinkLabel4)
         Me.Controls.Add(Me.PictureBox4)
         Me.Controls.Add(Me.PictureBox3)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Controls.Add(Me.LinkLabel3)
-        Me.Controls.Add(Me.LinkLabel2)
-        Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.News)
         Me.Controls.Add(Me.Button2)
@@ -236,21 +175,16 @@ Partial Class Form1
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
     Friend WithEvents Button1 As Button
     Friend WithEvents Button2 As Button
     Friend WithEvents Button3 As Button
-    Friend WithEvents LinkLabel1 As LinkLabel
-    Friend WithEvents LinkLabel2 As LinkLabel
-    Friend WithEvents LinkLabel3 As LinkLabel
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents PictureBox3 As PictureBox
     Friend WithEvents PictureBox4 As PictureBox
-    Friend WithEvents LinkLabel4 As LinkLabel
     Friend WithEvents Offline As PictureBox
     Friend WithEvents News As Panel
     Friend WithEvents Button4 As Button

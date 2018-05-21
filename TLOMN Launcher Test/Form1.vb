@@ -75,39 +75,27 @@ Public Class Form1
         Process.Start("dgVoodooCpl.exe")
     End Sub
 
-    '----------------------------------------------------------------
-    'Sidebar links
-    '----------------------------------------------------------------
+    Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox1.Click
 
-    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e _
-    As System.EventArgs) Handles MyBase.Load
-        LinkLabel1.Links.Add(0, 19, "http://bit.ly/Beavercord")
-        LinkLabel2.Links.Add(0, 20, "http://biomediaproject.com/bmp")
-        LinkLabel3.Links.Add(0, 19, "http://youtube.com/vahkiti")
-        LinkLabel4.Links.Add(0, 21, "https://github.com/TheLegendOfMataNui/game-issues/issues")
+        Process.Start("http://biomediaproject.com/")
+
     End Sub
 
-    Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal _
-    e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles _
-    LinkLabel1.LinkClicked
-        System.Diagnostics.Process.Start(e.Link.LinkData.ToString())
+    Private Sub PictureBox2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox2.Click
+
+        Process.Start("http://bit.ly/Beavercord")
+
     End Sub
 
-    Private Sub LinkLabel2_LinkClicked(ByVal sender As System.Object, ByVal _
-    e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles _
-    LinkLabel2.LinkClicked
-        System.Diagnostics.Process.Start(e.Link.LinkData.ToString())
+    Private Sub PictureBox3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox3.Click
+
+        Process.Start("http://youtube.com/vahkiti/")
+
     End Sub
 
-    Private Sub LinkLabel3_LinkClicked(ByVal sender As System.Object, ByVal _
-    e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles _
-    LinkLabel3.LinkClicked
-        System.Diagnostics.Process.Start(e.Link.LinkData.ToString())
-    End Sub
+    Private Sub PictureBox4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox4.Click
 
-    Private Sub LinkLabel4_LinkClicked(ByVal sender As System.Object, ByVal _
-    e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles _
-    LinkLabel4.LinkClicked
-        System.Diagnostics.Process.Start(e.Link.LinkData.ToString())
+        Process.Start("https://github.com/TheLegendOfMataNui/game-issues/issues")
+
     End Sub
 End Class

@@ -303,6 +303,7 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\LinkBMP1.png" />
     <None Include="Resources\TexLinks.png" />
     <None Include="Resources\LinkGit.png" />
     <None Include="Resources\LinkYT.png" />

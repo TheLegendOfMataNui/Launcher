@@ -153,36 +153,6 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property LinkDCRD() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("LinkDCRD", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Friend ReadOnly Property LinkGit() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("LinkGit", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Friend ReadOnly Property LinkYT() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("LinkYT", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
         Friend ReadOnly Property Offline() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Offline", resourceCulture)
