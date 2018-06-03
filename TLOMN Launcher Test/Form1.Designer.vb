@@ -24,7 +24,6 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
@@ -33,11 +32,14 @@ Partial Class Form1
         Me.News = New System.Windows.Forms.Panel()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.PictureBox6 = New System.Windows.Forms.PictureBox()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Button1
@@ -50,23 +52,13 @@ Partial Class Form1
         Me.Button1.TabIndex = 0
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'Button2
-        '
-        Me.Button2.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button2.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonAHK
-        Me.Button2.Location = New System.Drawing.Point(560, 495)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(153, 56)
-        Me.Button2.TabIndex = 1
-        Me.Button2.UseVisualStyleBackColor = True
-        '
         'Button3
         '
         Me.Button3.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button3.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonDGV
-        Me.Button3.Location = New System.Drawing.Point(719, 495)
+        Me.Button3.Location = New System.Drawing.Point(558, 495)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(153, 56)
+        Me.Button3.Size = New System.Drawing.Size(155, 56)
         Me.Button3.TabIndex = 3
         Me.Button3.UseVisualStyleBackColor = True
         '
@@ -141,11 +133,33 @@ Partial Class Form1
         '
         Me.PictureBox5.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
-        Me.PictureBox5.Location = New System.Drawing.Point(728, 12)
+        Me.PictureBox5.Location = New System.Drawing.Point(719, 12)
         Me.PictureBox5.Name = "PictureBox5"
         Me.PictureBox5.Size = New System.Drawing.Size(153, 73)
+        Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.PictureBox5.TabIndex = 15
         Me.PictureBox5.TabStop = False
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Items.AddRange(New Object() {"640x480 (4:3)", "852x480 (16:9)", "800x600 (4:3)", "960x720 (4:3)", "1024×576 (16:9)", "1024x768 (4:3)", "1152x864 (4:3)", "1176x664 (16:9)", "1280x720 (16:9)", "1280×960 (4:3)", "1280x1024 (4:3)", "1366×768 (16:9)", "1600×900 (16:9)", "1600×1200 (4:3)", "1920x1080 (16:9)", "1920×1440 (4:3)", "2048×1536 (4:3)", "2560x1440 (16:9)", "3840x2160 (16:9)", "7680x4320 (16:9)"})
+        Me.ComboBox1.Location = New System.Drawing.Point(719, 528)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(153, 21)
+        Me.ComboBox1.TabIndex = 16
+        Me.ComboBox1.Text = "Please Select..."
+        '
+        'PictureBox6
+        '
+        Me.PictureBox6.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox6.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.TexRes
+        Me.PictureBox6.Location = New System.Drawing.Point(719, 495)
+        Me.PictureBox6.Name = "PictureBox6"
+        Me.PictureBox6.Size = New System.Drawing.Size(153, 27)
+        Me.PictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox6.TabIndex = 17
+        Me.PictureBox6.TabStop = False
         '
         'Form1
         '
@@ -154,6 +168,8 @@ Partial Class Form1
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.BackgroundImage = Global.TLOMN_Launcher_Test.My.Resources.Resources.po_lev_10xx_Dirt2
         Me.ClientSize = New System.Drawing.Size(884, 561)
+        Me.Controls.Add(Me.PictureBox6)
+        Me.Controls.Add(Me.ComboBox1)
         Me.Controls.Add(Me.PictureBox5)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button1)
@@ -163,7 +179,6 @@ Partial Class Form1
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.News)
-        Me.Controls.Add(Me.Button2)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
@@ -174,12 +189,12 @@ Partial Class Form1
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents Button1 As Button
-    Friend WithEvents Button2 As Button
     Friend WithEvents Button3 As Button
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents PictureBox2 As PictureBox
@@ -189,4 +204,6 @@ Partial Class Form1
     Friend WithEvents News As Panel
     Friend WithEvents Button4 As Button
     Friend WithEvents PictureBox5 As PictureBox
+    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents PictureBox6 As PictureBox
 End Class

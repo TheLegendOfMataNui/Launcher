@@ -167,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="INIFile.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -265,14 +266,9 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\LinkBMP1.png" />
+    <None Include="Resources\TexRes.png" />
     <None Include="Resources\TexLinks.png" />
-    <None Include="Resources\LinkGit.png" />
-    <None Include="Resources\LinkYT.png" />
-    <None Include="Resources\LinkDCRD.png" />
-    <None Include="Resources\LinkBMP.png" />
     <None Include="Resources\ButtonDGV.png" />
-    <None Include="Resources\ButtonAHK.png" />
     <None Include="Resources\ButtonBeta.png" />
     <None Include="Resources\ButtonAlpha.png" />
     <None Include="Resources\po_lev_10xx_Dirt2.png" />
