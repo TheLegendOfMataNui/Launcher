@@ -37,7 +37,11 @@ Public Class INIFile
                     ' Read key and value
                     Dim parts As String() = line.Split("=")
                     If parts.Length = 2 Then
-                        currentSection.Entries.Add(parts(0).Trim(), parts(1).Trim())
+                        If Not currentSection.Entries.ContainsKey(parts(0).Trim()) Then
+                            currentSection.Entries.Add(parts(0).Trim(), parts(1).Trim())
+                        Else
+                            System.Diagnostics.Debugger.Break()
+                        End If
                     Else
                         System.Windows.Forms.MessageBox.Show("Bad key and value")
                     End If

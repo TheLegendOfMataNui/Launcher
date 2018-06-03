@@ -10,6 +10,7 @@ Public Class Form1
 
     Private Const dgVoodooConfigFilename As String = "dgVoodoo.conf"
     Private Const LauncherConfigFilename As String = "TLOMNLauncher.ini"
+    Private Const BionicleConfigFilename As String = "Bionicle.ini"
 
     Private Const AlphaDefaultFilename As String = "..\LEGO Bionicle\LEGO Bionicle.exe"
     Private Const BetaDefaultFilename As String = "..\LEGO Bionicle (Beta)\LEGO Bionicle.exe"
@@ -28,6 +29,19 @@ Public Class Form1
         End Try
     End Function
 
+    Private Function GCD(a As Integer, b As Integer) As Integer
+        If b = 0 Then
+            Return a
+        Else
+            Return GCD(b, a Mod b)
+        End If
+    End Function
+
+    Private Function CalcAspectRatio(width As Integer, height As Integer) As String
+        Dim scale As Integer = GCD(width, height)
+        Return (width / scale) & ":" & (height / scale)
+    End Function
+
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e _
     As System.EventArgs) Handles MyBase.Load
         ' Read the TLOMNLauncher config
@@ -36,24 +50,30 @@ Public Class Form1
         LauncherUpdater.DoUpdateCheck()
         DoDebugFix()
 
-        If System.IO.File.Exists(dgVoodooConfigFilename) Then
-            ' Check if the conf starts with "DEGET"
+        If Configuration.GetString("Beta", "EXEName", "<none>") IsNot "<none>" Then
+            Dim voodooFilename As String = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Configuration.GetString("Beta", "EXEName", "<none>")), dgVoodooConfigFilename)
+            If System.IO.File.Exists(voodooFilename) Then
+                ' Check if the conf starts with "DEGET"
 
-            Dim firstFiveLetters As String
+                Dim firstFiveLetters As String
 
-            Using reader As New System.IO.BinaryReader(New System.IO.FileStream(dgVoodooConfigFilename, System.IO.FileMode.Open))
-                firstFiveLetters = System.Text.Encoding.ASCII.GetString(reader.ReadBytes(5))
+                Using reader As New System.IO.BinaryReader(New System.IO.FileStream(voodooFilename, System.IO.FileMode.Open))
+                    firstFiveLetters = System.Text.Encoding.ASCII.GetString(reader.ReadBytes(5))
+                End Using
 
                 If firstFiveLetters = "DEGET" Then
                     MessageBox.Show("WARNING: You must to dgVoodoo 2.54 or newer to use the resolution picker.")
                 Else
-                    Dim dgVoodooINI As New INIFile(dgVoodooConfigFilename)
-                    Dim resolutionSetting As String = dgVoodooINI.GetString("DirectX", "Resolution", "h:480, v:640")
-                    MessageBox.Show("Your dgVoodoo resolution is " & resolutionSetting)
+                    Dim dgVoodooINI As New INIFile(voodooFilename)
+                    Dim resolutionSetting As String = dgVoodooINI.GetString("DirectX", "Resolution", "h:640, v:480")
+                    'MessageBox.Show("Your dgVoodoo resolution is " & resolutionSetting)
+                    Dim parts() As String = resolutionSetting.Split(" ")
+                    Dim horizontal As Integer = parts(0).TrimEnd(",").Substring(2)
+                    Dim vertical As Integer = parts(1).Substring(2)
+                    Dim selectedRes As String = horizontal & "x" & vertical & " (" & CalcAspectRatio(horizontal, vertical) & ")"
+                    ComboBox1.SelectedItem = selectedRes
                 End If
-            End Using
-
-
+            End If
         End If
     End Sub
 
@@ -360,5 +380,40 @@ Public Class Form1
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Configuration.Write(LauncherConfigFilename)
+    End Sub
+
+    Private Sub ComboBox1_SelectedValueChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedValueChanged
+        Dim selectedItem As String = ComboBox1.SelectedItem
+        Dim parts() As String = selectedItem.Split(" ")(0).Split("x")
+        Dim width As Integer = parts(0)
+        Dim height As Integer = parts(1)
+        Dim bioHeight As Integer = 480
+        Dim bioWidth As Integer = bioHeight * (width / height)
+
+        Dim alphaFilename As String = Configuration.GetString("Alpha", "EXEName", "<none>")
+        Dim alphaFolder As String = System.IO.Path.GetDirectoryName(alphaFilename)
+        If alphaFilename IsNot "<none>" Then
+            Dim BioINI As New INIFile(System.IO.Path.Combine(alphaFolder, BionicleConfigFilename))
+            BioINI.SetString("GraphicsOptions", "ResolutionW", bioWidth)
+            BioINI.SetString("GraphicsOptions", "ResolutionH", bioHeight)
+            BioINI.Write(System.IO.Path.Combine(alphaFolder, BionicleConfigFilename))
+
+            Dim voodooINI As New INIFile(System.IO.Path.Combine(alphaFolder, dgVoodooConfigFilename))
+            voodooINI.SetString("DirectX", "Resolution", "h:" & width & ", v:" & height)
+            voodooINI.Write(System.IO.Path.Combine(alphaFolder, dgVoodooConfigFilename))
+        End If
+
+        Dim betaFilename As String = Configuration.GetString("Beta", "EXEName", "<none>")
+        Dim betaFolder As String = System.IO.Path.GetDirectoryName(betaFilename)
+        If betaFilename IsNot "<none>" Then
+            Dim BioINI As New INIFile(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+            BioINI.SetString("GraphicsOptions", "ResolutionW", bioWidth)
+            BioINI.SetString("GraphicsOptions", "ResolutionH", bioHeight)
+            BioINI.Write(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+
+            Dim voodooINI As New INIFile(System.IO.Path.Combine(betaFolder, dgVoodooConfigFilename))
+            voodooINI.SetString("DirectX", "Resolution", "h:" & width & ", v:" & height)
+            voodooINI.Write(System.IO.Path.Combine(betaFolder, dgVoodooConfigFilename))
+        End If
     End Sub
 End Class
