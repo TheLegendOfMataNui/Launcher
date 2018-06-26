@@ -34,6 +34,7 @@ Partial Class Form1
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.PictureBox6 = New System.Windows.Forms.PictureBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -143,7 +144,7 @@ Partial Class Form1
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"640x480 (4:3)", "852x480 (16:9)", "800x600 (4:3)", "960x720 (4:3)", "1024×576 (16:9)", "1024x768 (4:3)", "1152x864 (4:3)", "1176x664 (16:9)", "1280x720 (16:9)", "1280×960 (4:3)", "1280x1024 (4:3)", "1366×768 (16:9)", "1600×900 (16:9)", "1600×1200 (4:3)", "1920x1080 (16:9)", "1920×1440 (4:3)", "2048×1536 (4:3)", "2560x1440 (16:9)", "3840x2160 (16:9)", "7680x4320 (16:9)"})
+        Me.ComboBox1.Items.AddRange(New Object() {"640x480 (4:3)", "852x480 (16:9)", "800x600 (4:3)", "960x720 (4:3)", "1024x576 (16:9)", "1024x768 (4:3)", "1152x864 (4:3)", "1176x664 (16:9)", "1280x720 (16:9)", "1280x960 (4:3)", "1280x1024 (4:3)", "1366x768 (16:9)", "1600x900 (16:9)", "1600x1200 (4:3)", "1920x1080 (16:9)", "1920x1440 (4:3)", "2048x1536 (4:3)", "2560x1440 (16:9)", "3840x2160 (16:9)", "7680x4320 (16:9)"})
         Me.ComboBox1.Location = New System.Drawing.Point(719, 528)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(153, 21)
@@ -161,6 +162,18 @@ Partial Class Form1
         Me.PictureBox6.TabIndex = 17
         Me.PictureBox6.TabStop = False
         '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.BackColor = System.Drawing.Color.Transparent
+        Me.CheckBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CheckBox1.Location = New System.Drawing.Point(719, 472)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(154, 17)
+        Me.CheckBox1.TabIndex = 18
+        Me.CheckBox1.Text = "Use Optional Patch            "
+        Me.CheckBox1.UseVisualStyleBackColor = False
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -168,6 +181,7 @@ Partial Class Form1
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.BackgroundImage = Global.TLOMN_Launcher_Test.My.Resources.Resources.po_lev_10xx_Dirt2
         Me.ClientSize = New System.Drawing.Size(884, 561)
+        Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.PictureBox6)
         Me.Controls.Add(Me.ComboBox1)
         Me.Controls.Add(Me.PictureBox5)
@@ -191,6 +205,7 @@ Partial Class Form1
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -206,4 +221,5 @@ Partial Class Form1
     Friend WithEvents PictureBox5 As PictureBox
     Friend WithEvents ComboBox1 As ComboBox
     Friend WithEvents PictureBox6 As PictureBox
+    Friend WithEvents CheckBox1 As CheckBox
 End Class

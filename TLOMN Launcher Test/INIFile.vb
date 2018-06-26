@@ -3,7 +3,7 @@ Imports System.Collections.Generic
 Imports System.IO
 
 '----------------------------------------------------------------
-'Read BIONICLE.ini
+'Read BIONICLE.ini & DGVoodoo Config
 '----------------------------------------------------------------
 
 Public Class INIFile
