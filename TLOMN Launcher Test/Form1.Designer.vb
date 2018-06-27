@@ -47,7 +47,7 @@ Partial Class Form1
         '
         Me.Button1.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button1.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonAlpha
-        Me.Button1.Location = New System.Drawing.Point(12, 495)
+        Me.Button1.Location = New System.Drawing.Point(173, 495)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(267, 56)
         Me.Button1.TabIndex = 0
@@ -57,9 +57,9 @@ Partial Class Form1
         '
         Me.Button3.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button3.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonDGV
-        Me.Button3.Location = New System.Drawing.Point(558, 495)
+        Me.Button3.Location = New System.Drawing.Point(719, 495)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(155, 56)
+        Me.Button3.Size = New System.Drawing.Size(155, 27)
         Me.Button3.TabIndex = 3
         Me.Button3.UseVisualStyleBackColor = True
         '
@@ -124,7 +124,7 @@ Partial Class Form1
         '
         Me.Button4.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button4.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonBeta
-        Me.Button4.Location = New System.Drawing.Point(285, 495)
+        Me.Button4.Location = New System.Drawing.Point(446, 495)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(267, 56)
         Me.Button4.TabIndex = 14
@@ -145,7 +145,7 @@ Partial Class Form1
         '
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"640x480 (4:3)", "852x480 (16:9)", "800x600 (4:3)", "960x720 (4:3)", "1024x576 (16:9)", "1024x768 (4:3)", "1152x864 (4:3)", "1176x664 (16:9)", "1280x720 (16:9)", "1280x960 (4:3)", "1280x1024 (4:3)", "1366x768 (16:9)", "1600x900 (16:9)", "1600x1200 (4:3)", "1920x1080 (16:9)", "1920x1440 (4:3)", "2048x1536 (4:3)", "2560x1440 (16:9)", "3840x2160 (16:9)", "7680x4320 (16:9)"})
-        Me.ComboBox1.Location = New System.Drawing.Point(719, 528)
+        Me.ComboBox1.Location = New System.Drawing.Point(12, 528)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(153, 21)
         Me.ComboBox1.TabIndex = 16
@@ -155,7 +155,7 @@ Partial Class Form1
         '
         Me.PictureBox6.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox6.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.TexRes
-        Me.PictureBox6.Location = New System.Drawing.Point(719, 495)
+        Me.PictureBox6.Location = New System.Drawing.Point(12, 495)
         Me.PictureBox6.Name = "PictureBox6"
         Me.PictureBox6.Size = New System.Drawing.Size(153, 27)
         Me.PictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
@@ -167,11 +167,12 @@ Partial Class Form1
         Me.CheckBox1.AutoSize = True
         Me.CheckBox1.BackColor = System.Drawing.Color.Transparent
         Me.CheckBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CheckBox1.Location = New System.Drawing.Point(719, 472)
+        Me.CheckBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBox1.Location = New System.Drawing.Point(719, 530)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(154, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(155, 17)
         Me.CheckBox1.TabIndex = 18
-        Me.CheckBox1.Text = "Use Optional Patch            "
+        Me.CheckBox1.Text = "Use Optional Patch?   "
         Me.CheckBox1.UseVisualStyleBackColor = False
         '
         'Form1
@@ -183,6 +184,7 @@ Partial Class Form1
         Me.ClientSize = New System.Drawing.Size(884, 561)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.PictureBox6)
+        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.ComboBox1)
         Me.Controls.Add(Me.PictureBox5)
         Me.Controls.Add(Me.Button4)
@@ -191,7 +193,6 @@ Partial Class Form1
         Me.Controls.Add(Me.PictureBox3)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.News)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
