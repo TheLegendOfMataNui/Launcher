@@ -30,11 +30,11 @@ Partial Class Form1
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.News = New System.Windows.Forms.Panel()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.PictureBox6 = New System.Windows.Forms.PictureBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -59,7 +59,7 @@ Partial Class Form1
         Me.Button3.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonDGV
         Me.Button3.Location = New System.Drawing.Point(719, 495)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(155, 56)
+        Me.Button3.Size = New System.Drawing.Size(155, 27)
         Me.Button3.TabIndex = 3
         Me.Button3.UseVisualStyleBackColor = True
         '
@@ -120,20 +120,6 @@ Partial Class Form1
         Me.News.Size = New System.Drawing.Size(701, 467)
         Me.News.TabIndex = 2
         '
-        'CheckBox1
-        '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.BackColor = System.Drawing.Color.Transparent
-        Me.CheckBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CheckBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBox1.Location = New System.Drawing.Point(719, 534)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(155, 17)
-        Me.CheckBox1.TabIndex = 18
-        Me.CheckBox1.Text = "Use Optional Patch?   "
-        Me.CheckBox1.UseVisualStyleBackColor = False
-        Me.CheckBox1.Visible = False
-        '
         'Button4
         '
         Me.Button4.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -175,6 +161,19 @@ Partial Class Form1
         Me.PictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.PictureBox6.TabIndex = 17
         Me.PictureBox6.TabStop = False
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.BackColor = System.Drawing.Color.Transparent
+        Me.CheckBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CheckBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBox1.Location = New System.Drawing.Point(719, 530)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(155, 17)
+        Me.CheckBox1.TabIndex = 18
+        Me.CheckBox1.Text = "Use Optional Patch?   "
+        Me.CheckBox1.UseVisualStyleBackColor = False
         '
         'Form1
         '
