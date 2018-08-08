@@ -59,7 +59,7 @@ Partial Class Form1
         Me.Button3.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonDGV
         Me.Button3.Location = New System.Drawing.Point(719, 495)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(155, 27)
+        Me.Button3.Size = New System.Drawing.Size(155, 56)
         Me.Button3.TabIndex = 3
         Me.Button3.UseVisualStyleBackColor = True
         '
@@ -174,6 +174,7 @@ Partial Class Form1
         Me.CheckBox1.TabIndex = 18
         Me.CheckBox1.Text = "Use Optional Patch?   "
         Me.CheckBox1.UseVisualStyleBackColor = False
+        Me.CheckBox1.Visible = False
         '
         'Form1
         '
