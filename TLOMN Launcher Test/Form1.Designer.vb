@@ -34,7 +34,7 @@ Partial Class Form1
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.PictureBox6 = New System.Windows.Forms.PictureBox()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.TestMenu = New System.Windows.Forms.CheckBox()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -59,7 +59,7 @@ Partial Class Form1
         Me.Button3.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonDGV
         Me.Button3.Location = New System.Drawing.Point(719, 495)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(155, 56)
+        Me.Button3.Size = New System.Drawing.Size(153, 27)
         Me.Button3.TabIndex = 3
         Me.Button3.UseVisualStyleBackColor = True
         '
@@ -69,7 +69,7 @@ Partial Class Form1
         Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox1.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.BMPBanner
         Me.PictureBox1.ImageLocation = ""
-        Me.PictureBox1.Location = New System.Drawing.Point(719, 94)
+        Me.PictureBox1.Location = New System.Drawing.Point(719, 114)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(153, 86)
         Me.PictureBox1.TabIndex = 9
@@ -81,7 +81,7 @@ Partial Class Form1
         Me.PictureBox2.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox2.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.DCBanner
         Me.PictureBox2.ImageLocation = ""
-        Me.PictureBox2.Location = New System.Drawing.Point(719, 186)
+        Me.PictureBox2.Location = New System.Drawing.Point(719, 206)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(153, 87)
         Me.PictureBox2.TabIndex = 10
@@ -93,7 +93,7 @@ Partial Class Form1
         Me.PictureBox3.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox3.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.BHBanner
         Me.PictureBox3.ImageLocation = ""
-        Me.PictureBox3.Location = New System.Drawing.Point(719, 279)
+        Me.PictureBox3.Location = New System.Drawing.Point(719, 299)
         Me.PictureBox3.Name = "PictureBox3"
         Me.PictureBox3.Size = New System.Drawing.Size(153, 87)
         Me.PictureBox3.TabIndex = 11
@@ -105,7 +105,7 @@ Partial Class Form1
         Me.PictureBox4.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PictureBox4.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.GHBanner
         Me.PictureBox4.ImageLocation = ""
-        Me.PictureBox4.Location = New System.Drawing.Point(719, 372)
+        Me.PictureBox4.Location = New System.Drawing.Point(719, 392)
         Me.PictureBox4.Name = "PictureBox4"
         Me.PictureBox4.Size = New System.Drawing.Size(153, 87)
         Me.PictureBox4.TabIndex = 12
@@ -162,19 +162,17 @@ Partial Class Form1
         Me.PictureBox6.TabIndex = 17
         Me.PictureBox6.TabStop = False
         '
-        'CheckBox1
+        'TestMenu
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.BackColor = System.Drawing.Color.Transparent
-        Me.CheckBox1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CheckBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBox1.Location = New System.Drawing.Point(719, 530)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(155, 17)
-        Me.CheckBox1.TabIndex = 18
-        Me.CheckBox1.Text = "Use Optional Patch?   "
-        Me.CheckBox1.UseVisualStyleBackColor = False
-        Me.CheckBox1.Visible = False
+        Me.TestMenu.AutoSize = True
+        Me.TestMenu.BackColor = System.Drawing.Color.Transparent
+        Me.TestMenu.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TestMenu.Location = New System.Drawing.Point(732, 532)
+        Me.TestMenu.Name = "TestMenu"
+        Me.TestMenu.Size = New System.Drawing.Size(130, 19)
+        Me.TestMenu.TabIndex = 18
+        Me.TestMenu.Text = "Use Test Menu?"
+        Me.TestMenu.UseVisualStyleBackColor = False
         '
         'Form1
         '
@@ -183,7 +181,7 @@ Partial Class Form1
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.BackgroundImage = Global.TLOMN_Launcher_Test.My.Resources.Resources.po_lev_10xx_Dirt2
         Me.ClientSize = New System.Drawing.Size(884, 561)
-        Me.Controls.Add(Me.CheckBox1)
+        Me.Controls.Add(Me.TestMenu)
         Me.Controls.Add(Me.PictureBox6)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.ComboBox1)
@@ -224,4 +222,5 @@ Partial Class Form1
     Friend WithEvents ComboBox1 As ComboBox
     Friend WithEvents PictureBox6 As PictureBox
     Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents TestMenu As CheckBox
 End Class

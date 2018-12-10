@@ -86,6 +86,15 @@ Public Class INIFile
             Sections(section).Entries.Add(key, value)
         End If
     End Sub
+
+    Public Sub RemoveString(section As String, key As String)
+        If Sections.ContainsKey(section) Then
+            If Sections(section).Entries.ContainsKey(key) Then
+                ' delete it
+                Sections(section).Entries.Remove(key)
+            End If
+        End If
+    End Sub
 End Class
 
 Public Class INISection

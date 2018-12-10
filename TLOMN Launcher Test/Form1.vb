@@ -50,10 +50,6 @@ Public Class Form1
         LauncherUpdater.DoUpdateCheck()
         DoDebugFix()
 
-        If Configuration.GetString("Beta", "UseOptionalPatch", "<none>") = "True" Then
-            CheckBox1.Checked = True
-        End If
-
         If Configuration.GetString("Beta", "EXEName", "<none>") IsNot "<none>" Then
             Dim voodooFilename As String = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Configuration.GetString("Beta", "EXEName", "<none>")), dgVoodooConfigFilename)
             If System.IO.File.Exists(voodooFilename) Then
@@ -66,7 +62,7 @@ Public Class Form1
                 End Using
 
                 If firstFiveLetters = "DEGET" Then
-                    MessageBox.Show("WARNING: You must to dgVoodoo 2.54 or newer to use the resolution picker.")
+                    MessageBox.Show("WARNING: You must use dgVoodoo 2.54 or newer to use the resolution picker.")
                 Else
                     Dim dgVoodooINI As New INIFile(voodooFilename)
                     Dim resolutionSetting As String = dgVoodooINI.GetString("DirectX", "Resolution", "h:640, v:480")
@@ -91,7 +87,7 @@ Public Class Form1
                 End Using
 
                 If firstFiveLetters = "DEGET" Then
-                    MessageBox.Show("WARNING: You must to dgVoodoo 2.54 or newer to use the resolution picker.")
+                    MessageBox.Show("WARNING: You must use dgVoodoo 2.54 or newer to use the resolution picker.")
                 Else
                     Dim dgVoodooINI As New INIFile(voodooFilename)
                     Dim resolutionSetting As String = dgVoodooINI.GetString("DirectX", "Resolution", "h:640, v:480")
@@ -142,7 +138,7 @@ Public Class Form1
             If System.IO.File.Exists(AlphaDefaultFilename) Then
                 gameFilename = AlphaDefaultFilename
                 Configuration.SetString("Alpha", "EXEName", gameFilename)
-                ApplyResolution()
+                ApplyGameOptions()
             Else
                 Dim choice As DialogResult
                 choice = MessageBox.Show("Could not find the game. Is it downloaded?", "The Legend of Mata Nui Alpha", MessageBoxButtons.YesNoCancel)
@@ -153,7 +149,7 @@ Public Class Form1
                     If browser.ShowDialog() = DialogResult.OK Then
                         gameFilename = browser.FileName
                         Configuration.SetString("Alpha", "EXEName", gameFilename)
-                        ApplyResolution()
+                        ApplyGameOptions()
                     Else
                         Exit Sub
                     End If
@@ -170,23 +166,12 @@ Public Class Form1
                         If browser.ShowDialog() = DialogResult.OK Then
                             gameFilename = browser.FileName
                             Configuration.SetString("Alpha", "EXEName", gameFilename)
-                            ApplyResolution()
+                            ApplyGameOptions()
                         Else
                             Exit Sub
                         End If
-
-                        '----------------------------------------------------------------
-                        'Cleanup Dancyboi garbage
-                        '----------------------------------------------------------------
-
-                        My.Computer.FileSystem.DeleteFile("..\LEGO Bionicle\Data\characters\1hat\Anims\1haB.bhd")
-                        My.Computer.FileSystem.DeleteFile("..\LEGO Bionicle\Data\characters\1hat\Anims\1haD.bhd")
-                        My.Computer.FileSystem.DeleteFile("..\LEGO Bionicle\Data\characters\1hat\Anims\1haL.bhd")
-                        My.Computer.FileSystem.DeleteFile("..\LEGO Bionicle\Data\characters\1hat\Anims\1haR.bhd")
-                        My.Computer.FileSystem.DeleteFile("..\LEGO Bionicle\Data\characters\1hat\Anims\1haU.bhd")
-                        My.Computer.FileSystem.DeleteFile("..\LEGO Bionicle\Data\characters\1hat\Anims\1haW.bhd")
-                    Catch
                         Exit Sub
+                    Catch
                     End Try
                 Else
                     ' User canceled
@@ -219,7 +204,7 @@ Public Class Form1
             If System.IO.File.Exists(BetaDefaultFilename) Then
                 gameFilename = BetaDefaultFilename
                 Configuration.SetString("Beta", "EXEName", gameFilename)
-                ApplyResolution()
+                ApplyGameOptions()
             Else
                 Dim choice As DialogResult
                 choice = MessageBox.Show("Could not find the game. Is it downloaded?", "The Legend of Mata Nui Beta", MessageBoxButtons.YesNoCancel)
@@ -230,7 +215,7 @@ Public Class Form1
                     If browser.ShowDialog() = DialogResult.OK Then
                         gameFilename = browser.FileName
                         Configuration.SetString("Beta", "EXEName", gameFilename)
-                        ApplyResolution()
+                        ApplyGameOptions()
                     Else
                         Exit Sub
                     End If
@@ -247,7 +232,7 @@ Public Class Form1
                         If browser.ShowDialog() = DialogResult.OK Then
                             gameFilename = browser.FileName
                             Configuration.SetString("Beta", "EXEName", gameFilename)
-                            ApplyResolution()
+                            ApplyGameOptions()
                         Else
                             Exit Sub
                         End If
@@ -472,10 +457,14 @@ Public Class Form1
     '----------------------------------------------------------------
 
     Private Sub ComboBox1_SelectedValueChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedValueChanged
-        ApplyResolution()
+        ApplyGameOptions()
     End Sub
 
-    Public Sub ApplyResolution()
+    Private Sub TestMenu_CheckedChanged(sender As Object, e As EventArgs) Handles TestMenu.CheckedChanged
+        ApplyGameOptions()
+    End Sub
+
+    Public Sub ApplyGameOptions()
         Dim width As Integer
         Dim height As Integer
         If ComboBox1.SelectedItem IsNot Nothing Then
@@ -503,6 +492,20 @@ Public Class Form1
             voodooINI.Write(System.IO.Path.Combine(alphaFolder, dgVoodooConfigFilename))
         End If
 
+        If TestMenu.Checked Then
+            Dim betaFolder As String = System.IO.Path.GetDirectoryName(alphaFilename)
+            Dim BioINI As New INIFile(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+            BioINI.SetString("Misc", "Cheatmenu", "LEGOTester")
+            BioINI.Write(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+        Else
+            If alphaFilename IsNot "<none>" Then
+                Dim betaFolder As String = System.IO.Path.GetDirectoryName(alphaFilename)
+                Dim BioINI As New INIFile(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+                BioINI.RemoveString("Misc", "Cheatmenu")
+                BioINI.Write(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+            End If
+        End If
+
         Dim betaFilename As String = Configuration.GetString("Beta", "EXEName", "<none>")
         If betaFilename IsNot "<none>" Then
             Dim betaFolder As String = System.IO.Path.GetDirectoryName(betaFilename)
@@ -515,11 +518,25 @@ Public Class Form1
             voodooINI.SetString("DirectX", "Resolution", "h:" & width & ", v:" & height)
             voodooINI.Write(System.IO.Path.Combine(betaFolder, dgVoodooConfigFilename))
         End If
+
+        If TestMenu.Checked Then
+            Dim betaFolder As String = System.IO.Path.GetDirectoryName(betaFilename)
+            Dim BioINI As New INIFile(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+            BioINI.SetString("Misc", "Cheatmenu", "LEGOTester")
+            BioINI.Write(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+        Else
+            If betaFilename IsNot "<none>" Then
+                Dim betaFolder As String = System.IO.Path.GetDirectoryName(betaFilename)
+                Dim BioINI As New INIFile(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+                BioINI.RemoveString("Misc", "Cheatmenu")
+                BioINI.Write(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+            End If
+        End If
     End Sub
 
     '----------------------------------------------------------------
     'Save Config On Exit
-    '--------------------------------------------------------------
+    '----------------------------------------------------------------
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Configuration.Write(LauncherConfigFilename)
@@ -529,20 +546,4 @@ Public Class Form1
 
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
-        If CheckBox1.Checked Then
-            ' Will install on the launch
-            Configuration.SetString("Beta", "UseOptionalPatch", "True")
-        ElseIf CheckBox1.Checked = False Then
-            ' Reset the beta
-            If Configuration.GetString("Beta", "UseOptionalPatch", "<none>" = "True") Then
-                Configuration.SetString("Beta", "UseOptionalPatch", "False")
-                Dim gameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Beta", "EXEName", "<none>"))
-                System.IO.File.WriteAllText(System.IO.Path.Combine(gameFolder, "versionbeta.txt"), "<update plz>")
-                DoPatchBeta()
-            Else
-                Configuration.SetString("Beta", "UseOptionalPatch", "False")
-            End If
-        End If
-    End Sub
 End Class
