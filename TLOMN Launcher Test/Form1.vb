@@ -188,17 +188,6 @@ Public Class Form1
     '----------------------------------------------------------------
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        'If Configuration.GetString("Beta", "UseOptionalPatch", "<none>") = "<none>" Then
-        'Dim OptionalPatchChoice = MessageBox.Show("Use the optional patch?", "The Legend of Mata Nui Beta", MessageBoxButtons.YesNoCancel)
-        'If OptionalPatchChoice = DialogResult.Yes Then
-        'Configuration.SetString("Beta", "UseOptionalPatch", "True")
-        'ElseIf OptionalPatchChoice = DialogResult.No Then
-        'Configuration.SetString("Beta", "UseOptionalPatch", "False")
-        'Else
-        'Exit Sub
-        'End If
-        'End If
-
         Dim gameFilename As String = Configuration.GetString("Beta", "EXEName", "<none>")
         If gameFilename = "<none>" Then
             If System.IO.File.Exists(BetaDefaultFilename) Then
