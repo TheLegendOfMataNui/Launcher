@@ -15,7 +15,13 @@ Public Class Form1
     Private ReadOnly AlphaDefaultFilename As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\LEGO Media\LEGO Bionicle\LEGO Bionicle.exe"
     Private ReadOnly BetaDefaultFilename As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\LEGO Media\LEGO Bionicle (Beta)\LEGO Bionicle.exe"
 
+    Private IgnoreUI As Boolean = True
+
     Public Configuration As INIFile
+
+    '----------------------------------------------------------------
+    'Startup Tasks
+    '----------------------------------------------------------------
 
     Public Shared Function CheckForInternetConnection() As Boolean
         Try
@@ -103,6 +109,15 @@ Public Class Form1
                 End If
             End If
         End If
+
+        Dim betaFilename As String = Configuration.GetString("Beta", "EXEName", "<none>")
+        Dim betaFolder As String = System.IO.Path.GetDirectoryName(betaFilename)
+        Dim BioINI As New INIFile(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
+        If BioINI.GetString("Misc", "Cheatmenu", "<none>") = "LEGOTester" Then
+            TestMenu.Checked = True
+        End If
+
+        IgnoreUI = False
     End Sub
 
     '----------------------------------------------------------------
@@ -145,7 +160,6 @@ Public Class Form1
                 If choice = DialogResult.Yes Then
                     ' Browse for the game
                     Dim browser As New OpenFileDialog()
-                    browser.Filter = "LEGO Bionicle.exe|LEGO Bionicle.exe"
                     If browser.ShowDialog() = DialogResult.OK Then
                         gameFilename = browser.FileName
                         Configuration.SetString("Alpha", "EXEName", gameFilename)
@@ -162,7 +176,6 @@ Public Class Form1
 
                         ' Ask user where they installed
                         Dim browser As New OpenFileDialog()
-                        browser.Filter = "LEGO Bionicle.exe|LEGO Bionicle.exe"
                         If browser.ShowDialog() = DialogResult.OK Then
                             gameFilename = browser.FileName
                             Configuration.SetString("Alpha", "EXEName", gameFilename)
@@ -200,7 +213,6 @@ Public Class Form1
                 If choice = DialogResult.Yes Then
                     ' Browse for the game
                     Dim browser As New OpenFileDialog()
-                    browser.Filter = "LEGO Bionicle.exe|LEGO Bionicle.exe"
                     If browser.ShowDialog() = DialogResult.OK Then
                         gameFilename = browser.FileName
                         Configuration.SetString("Beta", "EXEName", gameFilename)
@@ -217,7 +229,6 @@ Public Class Form1
 
                         ' Ask user where they installed
                         Dim browser As New OpenFileDialog()
-                        browser.Filter = "LEGO Bionicle.exe|LEGO Bionicle.exe"
                         If browser.ShowDialog() = DialogResult.OK Then
                             gameFilename = browser.FileName
                             Configuration.SetString("Beta", "EXEName", gameFilename)
@@ -353,45 +364,6 @@ Public Class Form1
             End If
         End If
 
-
-        If Configuration.GetString("Beta", "UseOptionalPatch", "<none>") = "True" Then
-            Try
-                My.Computer.Network.DownloadFile(
-                "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Patch/versionop.txt",
-                "Temp\versionop.txt", "", "", True, 1000, True)
-            Catch
-                Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
-                Exit Sub
-                Me.Close()
-            End Try
-
-            patchFilename = System.IO.Path.Combine(gameFolder, "PatchO.exe")
-            Dim optionalNetworkVersion = My.Computer.FileSystem.ReadAllText("Temp\versionop.txt")
-            Dim optionalDiskVersion = ""
-            If System.IO.File.Exists(System.IO.Path.Combine(gameFolder, "versionop.txt")) Then
-                optionalDiskVersion = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(gameFolder, "versionop.txt"))
-            End If
-            If optionalNetworkVersion <> optionalDiskVersion Then
-                Dim msgRsltOpt As MsgBoxResult = MsgBox("A new optional beta patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
-                If msgRsltOpt = MsgBoxResult.Yes Then
-                    Try
-                        My.Computer.Network.DownloadFile(
-                        "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Patch/PatchO.exe",
-                        patchFilename, "", "", True, 1000, True)
-                        Process.Start(patchFilename).WaitForExit()
-                    Catch
-                        Me.Close()
-                    End Try
-                    Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
-                    My.Computer.FileSystem.DeleteFile(patchFilename)
-
-                    '----------------------------------------------------------------
-                    'If patch declined, run game anyways
-                    '----------------------------------------------------------------
-                End If
-            End If
-        End If
-
         Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
         My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
         Close()
@@ -446,10 +418,12 @@ Public Class Form1
     '----------------------------------------------------------------
 
     Private Sub ComboBox1_SelectedValueChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedValueChanged
+        If IgnoreUI Then Exit Sub
         ApplyGameOptions()
     End Sub
 
     Private Sub TestMenu_CheckedChanged(sender As Object, e As EventArgs) Handles TestMenu.CheckedChanged
+        If IgnoreUI Then Exit Sub
         ApplyGameOptions()
     End Sub
 
@@ -479,20 +453,6 @@ Public Class Form1
             Dim voodooINI As New INIFile(System.IO.Path.Combine(alphaFolder, dgVoodooConfigFilename))
             voodooINI.SetString("DirectX", "Resolution", "h:" & width & ", v:" & height)
             voodooINI.Write(System.IO.Path.Combine(alphaFolder, dgVoodooConfigFilename))
-        End If
-
-        If TestMenu.Checked Then
-            Dim betaFolder As String = System.IO.Path.GetDirectoryName(alphaFilename)
-            Dim BioINI As New INIFile(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
-            BioINI.SetString("Misc", "Cheatmenu", "LEGOTester")
-            BioINI.Write(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
-        Else
-            If alphaFilename IsNot "<none>" Then
-                Dim betaFolder As String = System.IO.Path.GetDirectoryName(alphaFilename)
-                Dim BioINI As New INIFile(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
-                BioINI.RemoveString("Misc", "Cheatmenu")
-                BioINI.Write(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
-            End If
         End If
 
         Dim betaFilename As String = Configuration.GetString("Beta", "EXEName", "<none>")
