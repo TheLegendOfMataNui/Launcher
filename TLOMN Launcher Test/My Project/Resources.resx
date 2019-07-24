@@ -121,34 +121,37 @@
   <data name="ButtonBeta" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ButtonBeta.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ButtonDGV" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ButtonDGV.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BMPBanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BMPBanner.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DCBanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DCBanner.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BHBanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BHBanner.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="po_lev_10xx_Dirt2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\po_lev_10xx_Dirt2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ButtonAlpha" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ButtonAlpha.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GHBanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GHBanner.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TexLinks" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TexLinks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Offline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Offline.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TexLinks" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TexLinks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BMPBanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BMPBanner.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonDGV" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ButtonDGV.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BHBanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BHBanner.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TexRes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TexRes.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="po_lev_10xx_Dirt2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\po_lev_10xx_Dirt2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GHBanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GHBanner.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DCBanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DCBanner.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonAlpha" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ButtonAlpha.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonRebuilt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ButtonRebuilt.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

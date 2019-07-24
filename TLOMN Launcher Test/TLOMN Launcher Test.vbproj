@@ -21,6 +21,7 @@
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <RuntimeIdentifiers>win10-x86</RuntimeIdentifiers>
+    <TargetFrameworkProfile />
     <PublishUrl>C:\Users\Liam\Desktop\TLOMN Launcher v1.0\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -47,6 +48,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>BIONICLE The Legend of Mata Nui Launcher.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -57,6 +59,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>BIONICLE The Legend of Mata Nui Launcher.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -266,6 +269,7 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ButtonRebuilt.png" />
     <None Include="Resources\DCBanner.png" />
     <None Include="Resources\TexRes.png" />
     <None Include="Resources\TexLinks.png" />

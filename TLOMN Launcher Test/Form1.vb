@@ -14,6 +14,7 @@ Public Class Form1
 
     Private ReadOnly AlphaDefaultFilename As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\LEGO Media\LEGO Bionicle\LEGO Bionicle.exe"
     Private ReadOnly BetaDefaultFilename As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\LEGO Media\LEGO Bionicle (Beta)\LEGO Bionicle.exe"
+    Private ReadOnly RebuiltDefaultFilename As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\LEGO Media\LEGO Bionicle (Rebuilt)\LEGO Bionicle.exe"
 
     Private IgnoreUI As Boolean = True
 
@@ -55,6 +56,8 @@ Public Class Form1
 
         LauncherUpdater.DoUpdateCheck()
         DoDebugFix()
+        CheckboxBeta()
+        CheckboxRebuilt()
 
         If Configuration.GetString("Beta", "EXEName", "<none>") IsNot "<none>" Then
             Dim voodooFilename As String = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Configuration.GetString("Beta", "EXEName", "<none>")), dgVoodooConfigFilename)
@@ -108,17 +111,70 @@ Public Class Form1
                     ComboBox1.SelectedItem = selectedRes
                 End If
             End If
+
+        ElseIf Configuration.GetString("Rebuilt", "EXEName", "<none>") IsNot "<none>" Then
+
+            Dim voodooFilename As String = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Configuration.GetString("Rebuilt", "EXEName", "<none>")), dgVoodooConfigFilename)
+            If System.IO.File.Exists(voodooFilename) Then
+                ' Check if the conf starts with "DEGET"
+
+                Dim firstFiveLetters As String
+
+                Using reader As New System.IO.BinaryReader(New System.IO.FileStream(voodooFilename, System.IO.FileMode.Open))
+                    firstFiveLetters = System.Text.Encoding.ASCII.GetString(reader.ReadBytes(5))
+                End Using
+
+                If firstFiveLetters = "DEGET" Then
+                    MessageBox.Show("WARNING: You must use dgVoodoo 2.54 or newer to use the resolution picker.")
+                Else
+                    Dim dgVoodooINI As New INIFile(voodooFilename)
+                    Dim resolutionSetting As String = dgVoodooINI.GetString("DirectX", "Resolution", "h:640, v:480")
+                    'MessageBox.Show("Your dgVoodoo resolution is " & resolutionSetting)
+                    Dim parts() As String = resolutionSetting.Split(" ")
+                    Dim horizontal As Integer = parts(0).TrimEnd(",").Substring(2)
+                    Dim vertical As Integer = parts(1).Substring(2)
+                    Dim selectedRes As String = horizontal & "x" & vertical & " (" & CalcAspectRatio(horizontal, vertical) & ")"
+                    If Not ComboBox1.Items.Contains(selectedRes) Then
+                        ComboBox1.Items.Add(selectedRes)
+                    End If
+                    ComboBox1.SelectedItem = selectedRes
+                End If
+            End If
         End If
 
+
+    End Sub
+
+    Public Sub CheckboxBeta()
         Dim betaFilename As String = Configuration.GetString("Beta", "EXEName", "<none>")
+        If betaFilename = "<none>" Then
+            Exit Sub
+        End If
+
         Dim betaFolder As String = System.IO.Path.GetDirectoryName(betaFilename)
         Dim BioINI As New INIFile(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
         If BioINI.GetString("Misc", "Cheatmenu", "<none>") = "LEGOTester" Then
             TestMenu.Checked = True
+        Else
+            TestMenu.Checked = False
+        End If
+    End Sub
+
+    Public Sub CheckboxRebuilt()
+        Dim rebuiltFilename As String = Configuration.GetString("Rebuilt", "EXEName", "<none>")
+        If rebuiltFilename = "<none>" Then
+            Exit Sub
         End If
 
-        IgnoreUI = False
+        Dim rebuiltFolder As String = System.IO.Path.GetDirectoryName(rebuiltFilename)
+        Dim BioINI As New INIFile(System.IO.Path.Combine(rebuiltFolder, BionicleConfigFilename))
+        If BioINI.GetString("Misc", "Cheatmenu", "<none>") = "LEGOTester" Then
+            TestMenu.Checked = True
+        Else
+            TestMenu.Checked = False
+        End If
     End Sub
+
 
     '----------------------------------------------------------------
     'Draw browser window
@@ -251,6 +307,60 @@ Public Class Form1
     End Sub
 
     '----------------------------------------------------------------
+    'Perform game tests & launch (Rebuilt)
+    '----------------------------------------------------------------
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Dim gameFilename As String = Configuration.GetString("Rebuilt", "EXEName", "<none>")
+        If gameFilename = "<none>" Then
+            If System.IO.File.Exists(RebuiltDefaultFilename) Then
+                gameFilename = RebuiltDefaultFilename
+                Configuration.SetString("Rebuilt", "EXEName", gameFilename)
+                ApplyGameOptions()
+            Else
+                Dim choice As DialogResult
+                choice = MessageBox.Show("Could not find the game. Is it downloaded?", "The Legend of Mata Nui Beta", MessageBoxButtons.YesNoCancel)
+                If choice = DialogResult.Yes Then
+                    ' Browse for the game
+                    Dim browser As New OpenFileDialog()
+                    If browser.ShowDialog() = DialogResult.OK Then
+                        gameFilename = browser.FileName
+                        Configuration.SetString("Rebuilt", "EXEName", gameFilename)
+                        ApplyGameOptions()
+                    Else
+                        Exit Sub
+                    End If
+                ElseIf choice = DialogResult.No Then
+                    ' Download the game
+                    Try
+                        My.Computer.Network.DownloadFile("http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/setuprebuilt.exe",
+            "Temp\setupRebuilt.exe", "", "", True, 1000, True)
+                        Process.Start("Temp\setupRebuilt.exe").WaitForExit()
+
+                        ' Ask user where they installed
+                        Dim browser As New OpenFileDialog()
+                        If browser.ShowDialog() = DialogResult.OK Then
+                            gameFilename = browser.FileName
+                            Configuration.SetString("Rebuilt", "EXEName", gameFilename)
+                            ApplyGameOptions()
+                        Else
+                            Exit Sub
+                        End If
+
+                    Catch
+                        Exit Sub
+                    End Try
+                Else
+                    ' User canceled
+                    Exit Sub
+                End If
+            End If
+            Configuration.Write(LauncherConfigFilename)
+        End If
+        DoPatchRebuilt()
+    End Sub
+
+    '----------------------------------------------------------------
     'Check Patch Version (Alpha)
     '----------------------------------------------------------------
 
@@ -370,6 +480,64 @@ Public Class Form1
     End Sub
 
     '----------------------------------------------------------------
+    'Check Patch Version (Rebuilt)
+    '----------------------------------------------------------------
+
+    Public Sub DoPatchRebuilt()
+
+        '----------------------------------------------------------------
+        'Check patch version
+        '----------------------------------------------------------------
+
+        Try
+            My.Computer.Network.DownloadFile(
+            "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Patch/versionop.txt",
+            "Temp\versionop.txt", "", "", True, 1000, True)
+        Catch
+            Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+            Exit Sub
+            Me.Close()
+        End Try
+
+        Dim gameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+        Dim patchFilename As String = System.IO.Path.Combine(gameFolder, "PatchO.exe")
+
+        Dim text1 As String = My.Computer.FileSystem.ReadAllText("Temp\versionop.txt")
+        Dim text2 As String = ""
+        If System.IO.File.Exists(System.IO.Path.Combine(gameFolder, "versionop.txt")) Then
+            text2 = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(gameFolder, "versionop.txt"))
+        End If
+        If text1 <> text2 Then
+
+            '----------------------------------------------------------------
+            'If mismatch, show download prompt
+            '----------------------------------------------------------------
+
+            Dim msgRslt As MsgBoxResult = MsgBox("A new Rebuilt patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
+            If msgRslt = MsgBoxResult.Yes Then
+                Try
+                    My.Computer.Network.DownloadFile(
+                   "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Patch/PatchO.exe",
+                   patchFilename, "", "", True, 1000, True)
+                    Process.Start(patchFilename).WaitForExit()
+                Catch
+                    Me.Close()
+                End Try
+                Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+                My.Computer.FileSystem.DeleteFile(patchFilename)
+
+                '----------------------------------------------------------------
+                'If patch declined, run game anyways
+                '----------------------------------------------------------------
+            End If
+        End If
+
+        Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+        My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
+        Close()
+    End Sub
+
+    '----------------------------------------------------------------
     'Launch DGVoodoo
     '----------------------------------------------------------------
 
@@ -403,7 +571,7 @@ Public Class Form1
 
     Private Sub PictureBox3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox3.Click
 
-        Process.Start("http://youtube.com/vahkiti/")
+        Process.Start("http://youtube.com/LitestoneStudios/")
 
     End Sub
 
@@ -468,7 +636,26 @@ Public Class Form1
             voodooINI.Write(System.IO.Path.Combine(betaFolder, dgVoodooConfigFilename))
         End If
 
-        If TestMenu.Checked Then
+        Dim rebuiltFilename As String = Configuration.GetString("Rebuilt", "EXEName", "<none>")
+        If rebuiltFilename IsNot "<none>" Then
+            Dim rebuiltFolder As String = System.IO.Path.GetDirectoryName(rebuiltFilename)
+            Dim BioINI As New INIFile(System.IO.Path.Combine(rebuiltFolder, BionicleConfigFilename))
+            BioINI.SetString("GraphicsOptions", "ResolutionW", bioWidth)
+            BioINI.SetString("GraphicsOptions", "ResolutionH", bioHeight)
+            BioINI.Write(System.IO.Path.Combine(rebuiltFolder, BionicleConfigFilename))
+
+            Dim voodooINI As New INIFile(System.IO.Path.Combine(rebuiltFolder, dgVoodooConfigFilename))
+            voodooINI.SetString("DirectX", "Resolution", "h:" & width & ", v:" & height)
+            voodooINI.Write(System.IO.Path.Combine(rebuiltFolder, dgVoodooConfigFilename))
+        End If
+
+        '   Dim gameFilename As String = Configuration.GetString("Beta", "EXEName", "<none>")
+        '   gameFilename = Configuration.GetString("Rebuilt", "EXEName", "<none>")
+        '   If gameFilename = "<none>" Then
+        '   Exit Sub
+        '   End If
+
+        If TestMenu.Checked And betaFilename IsNot "<none>" Then
             Dim betaFolder As String = System.IO.Path.GetDirectoryName(betaFilename)
             Dim BioINI As New INIFile(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
             BioINI.SetString("Misc", "Cheatmenu", "LEGOTester")
@@ -481,6 +668,21 @@ Public Class Form1
                 BioINI.Write(System.IO.Path.Combine(betaFolder, BionicleConfigFilename))
             End If
         End If
+
+        If TestMenu.Checked And rebuiltFilename IsNot "<none>" Then
+            Dim rebuiltFolder As String = System.IO.Path.GetDirectoryName(rebuiltFilename)
+            Dim BioINI As New INIFile(System.IO.Path.Combine(rebuiltFolder, BionicleConfigFilename))
+            BioINI.SetString("Misc", "Cheatmenu", "LEGOTester")
+            BioINI.Write(System.IO.Path.Combine(rebuiltFolder, BionicleConfigFilename))
+        Else
+            If rebuiltFilename IsNot "<none>" Then
+                Dim rebuiltFolder As String = System.IO.Path.GetDirectoryName(rebuiltFilename)
+                Dim BioINI As New INIFile(System.IO.Path.Combine(rebuiltFolder, BionicleConfigFilename))
+                BioINI.Write(System.IO.Path.Combine(rebuiltFolder, BionicleConfigFilename))
+                BioINI.RemoveString("Misc", "Cheatmenu")
+                BioINI.Write(System.IO.Path.Combine(rebuiltFolder, BionicleConfigFilename))
+            End If
+        End If
     End Sub
 
     '----------------------------------------------------------------
@@ -489,6 +691,7 @@ Public Class Form1
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Configuration.Write(LauncherConfigFilename)
+        ApplyGameOptions()
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged

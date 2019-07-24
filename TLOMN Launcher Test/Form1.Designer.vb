@@ -35,6 +35,7 @@ Partial Class Form1
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.PictureBox6 = New System.Windows.Forms.PictureBox()
         Me.TestMenu = New System.Windows.Forms.CheckBox()
+        Me.Button2 = New System.Windows.Forms.Button()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -49,7 +50,7 @@ Partial Class Form1
         Me.Button1.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonAlpha
         Me.Button1.Location = New System.Drawing.Point(173, 495)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(267, 56)
+        Me.Button1.Size = New System.Drawing.Size(176, 56)
         Me.Button1.TabIndex = 0
         Me.Button1.UseVisualStyleBackColor = True
         '
@@ -124,9 +125,9 @@ Partial Class Form1
         '
         Me.Button4.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button4.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonBeta
-        Me.Button4.Location = New System.Drawing.Point(446, 495)
+        Me.Button4.Location = New System.Drawing.Point(355, 495)
         Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(267, 56)
+        Me.Button4.Size = New System.Drawing.Size(176, 56)
         Me.Button4.TabIndex = 14
         Me.Button4.UseVisualStyleBackColor = True
         '
@@ -174,6 +175,16 @@ Partial Class Form1
         Me.TestMenu.Text = "Use Test Menu?"
         Me.TestMenu.UseVisualStyleBackColor = False
         '
+        'Button2
+        '
+        Me.Button2.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button2.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.ButtonRebuilt
+        Me.Button2.Location = New System.Drawing.Point(537, 495)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(176, 56)
+        Me.Button2.TabIndex = 19
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -181,6 +192,7 @@ Partial Class Form1
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.BackgroundImage = Global.TLOMN_Launcher_Test.My.Resources.Resources.po_lev_10xx_Dirt2
         Me.ClientSize = New System.Drawing.Size(884, 561)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.TestMenu)
         Me.Controls.Add(Me.PictureBox6)
         Me.Controls.Add(Me.Button3)
@@ -223,4 +235,5 @@ Partial Class Form1
     Friend WithEvents PictureBox6 As PictureBox
     Friend WithEvents CheckBox1 As CheckBox
     Friend WithEvents TestMenu As CheckBox
+    Friend WithEvents Button2 As Button
 End Class
