@@ -334,8 +334,8 @@ Public Class Form1
                     ' Download the game
                     Try
                         My.Computer.Network.DownloadFile("http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/setuprebuilt.exe",
-            "Temp\setupRebuilt.exe", "", "", True, 1000, True)
-                        Process.Start("Temp\setupRebuilt.exe").WaitForExit()
+            "Temp\setuprebuilt.exe", "", "", True, 1000, True)
+                        Process.Start("Temp\setuprebuilt.exe").WaitForExit()
 
                         ' Ask user where they installed
                         Dim browser As New OpenFileDialog()
@@ -471,10 +471,13 @@ Public Class Form1
                 '----------------------------------------------------------------
                 'If patch declined, run game anyways
                 '----------------------------------------------------------------
-            End If
-        End If
 
-        Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
+            ElseIf msgRslt = MsgBoxResult.No Then
+                Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
+            End If
+        Else
+            Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
+        End If
         My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
         Close()
     End Sub
@@ -529,10 +532,13 @@ Public Class Form1
                 '----------------------------------------------------------------
                 'If patch declined, run game anyways
                 '----------------------------------------------------------------
-            End If
-        End If
 
-        Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+            ElseIf msgRslt = MsgBoxResult.No Then
+                Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+            End If
+        Else
+            Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+        End If
         My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
         Close()
     End Sub
