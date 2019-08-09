@@ -55,7 +55,6 @@ Public Class Form1
         Configuration = New INIFile(LauncherConfigFilename)
 
         LauncherUpdater.DoUpdateCheck()
-        DoDebugFix()
         CheckboxBeta()
         CheckboxRebuilt()
 
@@ -549,14 +548,6 @@ Public Class Form1
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         Process.Start("dgVoodooCpl.exe")
-    End Sub
-
-    '----------------------------------------------------------------
-    'Launch Debug Menu Fix
-    '----------------------------------------------------------------
-
-    Public Sub DoDebugFix()
-        Process.Start("Debug Menu Fix.exe")
     End Sub
 
     '----------------------------------------------------------------
