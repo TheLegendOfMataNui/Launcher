@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="GitHubAPI.vb" />
     <Compile Include="INIFile.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>

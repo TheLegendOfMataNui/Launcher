@@ -184,6 +184,13 @@ Public Class Form1
     Public Sub New()
         InitializeComponent()
 
+        Dim latestLauncherRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LauncherRepoIdentifier, False)
+        If latestLauncherRelease IsNot Nothing Then
+            MessageBox.Show("The latest launcher release is called '" & latestLauncherRelease.Name & "' (tag '" & latestLauncherRelease.TagName & "')" & vbNewLine & "Download URL: " & latestLauncherRelease.AssetDownloadURL)
+        Else
+            MessageBox.Show("Could not find any GitHub releases!")
+        End If
+
         Dim settings As New CefSettings()
         CefSharp.Cef.Initialize(settings)
 
