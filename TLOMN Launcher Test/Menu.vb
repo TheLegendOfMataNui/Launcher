@@ -190,7 +190,7 @@ Public Class Form1
             Exit Sub
         End If
 
-        NewsPage = New ChromiumWebBrowser("https://files.maskofdestiny.com/gms/tlomn/Launcher/Web/PatchNotes.html") With {
+        NewsPage = New ChromiumWebBrowser("https://810nicleday.com/LOMN/PatchNotes.html") With {
             .Dock = DockStyle.Fill
         }
         News.Controls.Add(NewsPage)
@@ -363,60 +363,44 @@ Public Class Form1
     '----------------------------------------------------------------
 
     Public Sub DoPatch()
-
         '----------------------------------------------------------------
         'Check patch version
         '----------------------------------------------------------------
-
+        Dim GameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Alpha", "EXEName", "<none>"))
+        Dim PatchFilename As String = System.IO.Path.Combine(GameFolder, "Patch.exe")
         Try
-            My.Computer.Network.DownloadFile(
-            "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Patch/version.txt",
-            "Temp\version.txt", "", "", True, 1000, True)
+            Dim LatestAlphaRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNAlphaRepoIdentifier, False)
+            Dim GitTag As String = LatestAlphaRelease.TagName
+            Dim LocalVer As String = ""
+            If System.IO.File.Exists(System.IO.Path.Combine(GameFolder, "version.txt")) Then
+                LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "version.txt"))
+            End If
+            If GitTag <> LocalVer Then
+                '----------------------------------------------------------------
+                'If version is newer, show download prompt
+                '----------------------------------------------------------------
+                Dim msgRslt As MsgBoxResult = MsgBox("A new alpha patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
+                If msgRslt = MsgBoxResult.Yes Then
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
+                    GitHubAPI.DownloadFile(LatestAlphaRelease.AssetDownloadURL, PatchFilename)
+                    Process.Start(PatchFilename).WaitForExit()
+                    Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
+                    My.Computer.FileSystem.DeleteFile(PatchFilename)
+                    Me.Close()
+                    '----------------------------------------------------------------
+                    'If patch declined, run game anyways
+                    '----------------------------------------------------------------
+                ElseIf msgRslt = MsgBoxResult.No Then
+                    Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
+                    My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
+                    Me.Close()
+                End If
+            End If
         Catch
             Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
             Me.Close()
             Exit Sub
         End Try
-
-        Dim gameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Alpha", "EXEName", "<none>"))
-        Dim patchFilename As String = System.IO.Path.Combine(gameFolder, "Patch.exe")
-
-        Dim text1 As String = My.Computer.FileSystem.ReadAllText("Temp\version.txt")
-        Dim text2 As String = ""
-        If System.IO.File.Exists(System.IO.Path.Combine(gameFolder, "version.txt")) Then
-            text2 = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(gameFolder, "version.txt"))
-        End If
-        If text1 <> text2 Then
-
-            '----------------------------------------------------------------
-            'If mismatch, show download prompt
-            '----------------------------------------------------------------
-
-            Dim msgRslt As MsgBoxResult = MsgBox("A new alpha patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
-            If msgRslt = MsgBoxResult.Yes Then
-                Try
-                    My.Computer.Network.DownloadFile(
-                   "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Patch/Patch.exe",
-                   patchFilename, "", "", True, 1000, True)
-                    Process.Start(patchFilename).WaitForExit()
-                Catch
-                    Me.Close()
-                End Try
-                Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
-                My.Computer.FileSystem.DeleteFile(patchFilename)
-
-                '----------------------------------------------------------------
-                'If patch declined, run game anyways
-                '----------------------------------------------------------------
-
-            ElseIf msgRslt = MsgBoxResult.No Then
-                Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
-            End If
-        Else
-            Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
-        End If
-        My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
-        Close()
     End Sub
 
     '----------------------------------------------------------------
@@ -424,60 +408,46 @@ Public Class Form1
     '----------------------------------------------------------------
 
     Public Sub DoPatchBeta()
-
         '----------------------------------------------------------------
         'Check patch version
         '----------------------------------------------------------------
-
+        Dim GameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Beta", "EXEName", "<none>"))
+        Dim PatchFilename As String = System.IO.Path.Combine(GameFolder, "Patch.exe")
         Try
-            My.Computer.Network.DownloadFile(
-            "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Patch/versionbeta.txt",
-            "Temp\versionbeta.txt", "", "", True, 1000, True)
+            Dim LatestBetaRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNBetaRepoIdentifier, False)
+            Dim GitTag As String = LatestBetaRelease.TagName
+            Dim LocalVer As String = ""
+            If System.IO.File.Exists(System.IO.Path.Combine(GameFolder, "version.txt")) Then
+                LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "version.txt"))
+            ElseIf System.IO.File.Exists(System.IO.Path.Combine(GameFolder, "versionbeta.txt")) Then
+                LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "versionbeta.txt"))
+            End If
+            If GitTag <> LocalVer Then
+                '----------------------------------------------------------------
+                'If version is newer, show download prompt
+                '----------------------------------------------------------------
+                Dim msgRslt As MsgBoxResult = MsgBox("A new beta patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
+                If msgRslt = MsgBoxResult.Yes Then
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
+                    GitHubAPI.DownloadFile(LatestBetaRelease.AssetDownloadURL, PatchFilename)
+                    Process.Start(PatchFilename).WaitForExit()
+                    Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
+                    My.Computer.FileSystem.DeleteFile(PatchFilename)
+                    Me.Close()
+                    '----------------------------------------------------------------
+                    'If patch declined, run game anyways
+                    '----------------------------------------------------------------
+                ElseIf msgRslt = MsgBoxResult.No Then
+                    Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
+                    My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
+                    Me.Close()
+                End If
+            End If
         Catch
             Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
-            Exit Sub
             Me.Close()
+            Exit Sub
         End Try
-
-        Dim gameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Beta", "EXEName", "<none>"))
-        Dim patchFilename As String = System.IO.Path.Combine(gameFolder, "PatchB.exe")
-
-        Dim text1 As String = My.Computer.FileSystem.ReadAllText("Temp\versionbeta.txt")
-        Dim text2 As String = ""
-        If System.IO.File.Exists(System.IO.Path.Combine(gameFolder, "versionbeta.txt")) Then
-            text2 = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(gameFolder, "versionbeta.txt"))
-        End If
-        If text1 <> text2 Then
-
-            '----------------------------------------------------------------
-            'If mismatch, show download prompt
-            '----------------------------------------------------------------
-
-            Dim msgRslt As MsgBoxResult = MsgBox("A new beta patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
-            If msgRslt = MsgBoxResult.Yes Then
-                Try
-                    My.Computer.Network.DownloadFile(
-                   "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Patch/PatchB.exe",
-                   patchFilename, "", "", True, 1000, True)
-                    Process.Start(patchFilename).WaitForExit()
-                Catch
-                    Me.Close()
-                End Try
-                Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
-                My.Computer.FileSystem.DeleteFile(patchFilename)
-
-                '----------------------------------------------------------------
-                'If patch declined, run game anyways
-                '----------------------------------------------------------------
-
-            ElseIf msgRslt = MsgBoxResult.No Then
-                Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
-            End If
-        Else
-            Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
-        End If
-        My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
-        Close()
     End Sub
 
     '----------------------------------------------------------------
@@ -485,60 +455,46 @@ Public Class Form1
     '----------------------------------------------------------------
 
     Public Sub DoPatchRebuilt()
-
         '----------------------------------------------------------------
         'Check patch version
         '----------------------------------------------------------------
-
+        Dim GameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+        Dim PatchFilename As String = System.IO.Path.Combine(GameFolder, "Patch.exe")
         Try
-            My.Computer.Network.DownloadFile(
-            "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Patch/versionop.txt",
-            "Temp\versionop.txt", "", "", True, 1000, True)
+            Dim LatestRebuiltRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNRebuiltRepoIdentifier, False)
+            Dim GitTag As String = LatestRebuiltRelease.TagName
+            Dim LocalVer As String = ""
+            If System.IO.File.Exists(System.IO.Path.Combine(GameFolder, "version.txt")) Then
+                LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "version.txt"))
+            ElseIf System.IO.File.Exists(System.IO.Path.Combine(GameFolder, "versionop.txt")) Then
+                LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "versionop.txt"))
+            End If
+            If GitTag <> LocalVer Then
+                '----------------------------------------------------------------
+                'If version is newer, show download prompt
+                '----------------------------------------------------------------
+                Dim msgRslt As MsgBoxResult = MsgBox("A new REBUILT patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
+                If msgRslt = MsgBoxResult.Yes Then
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
+                    GitHubAPI.DownloadFile(LatestRebuiltRelease.AssetDownloadURL, PatchFilename)
+                    Process.Start(PatchFilename).WaitForExit()
+                    Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+                    My.Computer.FileSystem.DeleteFile(PatchFilename)
+                    Me.Close()
+                    '----------------------------------------------------------------
+                    'If patch declined, run game anyways
+                    '----------------------------------------------------------------
+                ElseIf msgRslt = MsgBoxResult.No Then
+                    Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+                    My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
+                    Me.Close()
+                End If
+            End If
         Catch
             Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
-            Exit Sub
             Me.Close()
+            Exit Sub
         End Try
-
-        Dim gameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
-        Dim patchFilename As String = System.IO.Path.Combine(gameFolder, "PatchO.exe")
-
-        Dim text1 As String = My.Computer.FileSystem.ReadAllText("Temp\versionop.txt")
-        Dim text2 As String = ""
-        If System.IO.File.Exists(System.IO.Path.Combine(gameFolder, "versionop.txt")) Then
-            text2 = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(gameFolder, "versionop.txt"))
-        End If
-        If text1 <> text2 Then
-
-            '----------------------------------------------------------------
-            'If mismatch, show download prompt
-            '----------------------------------------------------------------
-
-            Dim msgRslt As MsgBoxResult = MsgBox("A new Rebuilt patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
-            If msgRslt = MsgBoxResult.Yes Then
-                Try
-                    My.Computer.Network.DownloadFile(
-                   "http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Patch/PatchO.exe",
-                   patchFilename, "", "", True, 1000, True)
-                    Process.Start(patchFilename).WaitForExit()
-                Catch
-                    Me.Close()
-                End Try
-                Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
-                My.Computer.FileSystem.DeleteFile(patchFilename)
-
-                '----------------------------------------------------------------
-                'If patch declined, run game anyways
-                '----------------------------------------------------------------
-
-            ElseIf msgRslt = MsgBoxResult.No Then
-                Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
-            End If
-        Else
-            Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
-        End If
-        My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
-        Close()
     End Sub
 
     '----------------------------------------------------------------
@@ -546,20 +502,29 @@ Public Class Form1
     '----------------------------------------------------------------
 
     Public Sub CheckLauncherUpdates()
-        Dim latestLauncherRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LauncherRepoIdentifier, False)
-        Dim GitTag As String = latestLauncherRelease.TagName
-        Dim LocalVer As String = My.Computer.FileSystem.ReadAllText("versionL.txt")
-        If GitTag <> LocalVer Then
-            '----------------------------------------------------------------
-            'If version is newer, show download prompt
-            '----------------------------------------------------------------
-            Dim msgRslt As MsgBoxResult = MsgBox("A new launcher update is available! Would you like to download it?", MsgBoxStyle.YesNo)
-            If msgRslt = MsgBoxResult.Yes Then
-                NewsPage.Load("https://files.maskofdestiny.com/gms/tlomn/Launcher/Web/PatchNotesLoading.html")
-                GitHubAPI.DownloadFile(latestLauncherRelease.AssetDownloadURL, "Temp\BIONICLE Launcher Installer.exe")
-                NewsPage.Load("https://files.maskofdestiny.com/gms/tlomn/Launcher/Web/PatchNotes.html")
+        Try
+            Dim LatestLauncherRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LauncherRepoIdentifier, False)
+            Dim GitTag As String = LatestLauncherRelease.TagName
+            Dim LocalVer As String = ""
+            If System.IO.File.Exists("version.txt") Then
+                LocalVer = My.Computer.FileSystem.ReadAllText("version.txt")
+            ElseIf System.IO.File.Exists("versionL.txt") Then
+                LocalVer = My.Computer.FileSystem.ReadAllText("versionL.txt")
             End If
-        End If
+            If GitTag <> LocalVer Then
+                '----------------------------------------------------------------
+                'If version is newer, show download prompt
+                '----------------------------------------------------------------
+                Dim msgRslt As MsgBoxResult = MsgBox("A new launcher update is available! Would you like to download it?", MsgBoxStyle.YesNo)
+                If msgRslt = MsgBoxResult.Yes Then
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
+                    GitHubAPI.DownloadFile(LatestLauncherRelease.AssetDownloadURL, "Temp\BIONICLE Launcher Installer.exe")
+                    Process.Start("Temp\BIONICLE Launcher Installer.exe")
+                    Me.Close()
+                End If
+            End If
+        Catch
+        End Try
     End Sub
 
     '----------------------------------------------------------------
