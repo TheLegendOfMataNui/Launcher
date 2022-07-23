@@ -178,7 +178,7 @@ Public Class Form1
     'Draw browser window
     '----------------------------------------------------------------
 
-    Private WithEvents Browser As ChromiumWebBrowser
+    Private WithEvents NewsPage As ChromiumWebBrowser
 
     Public Sub New()
         InitializeComponent()
@@ -190,10 +190,10 @@ Public Class Form1
             Exit Sub
         End If
 
-        Browser = New ChromiumWebBrowser("http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/Web/PatchNotes.html") With {
+        NewsPage = New ChromiumWebBrowser("https://files.maskofdestiny.com/gms/tlomn/Launcher/Web/PatchNotes.html") With {
             .Dock = DockStyle.Fill
         }
-        News.Controls.Add(Browser)
+        News.Controls.Add(NewsPage)
     End Sub
 
     '----------------------------------------------------------------
@@ -545,8 +545,8 @@ Public Class Form1
     'Check Launcher version
     '----------------------------------------------------------------
 
-    Public Async Sub CheckLauncherUpdates()
-        Dim latestLauncherRelease As GitHubRelease = Await GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LauncherRepoIdentifier, False)
+    Public Sub CheckLauncherUpdates()
+        Dim latestLauncherRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LauncherRepoIdentifier, False)
         Dim GitTag As String = latestLauncherRelease.TagName
         Dim LocalVer As String = My.Computer.FileSystem.ReadAllText("versionL.txt")
         If GitTag <> LocalVer Then
@@ -555,11 +555,9 @@ Public Class Form1
             '----------------------------------------------------------------
             Dim msgRslt As MsgBoxResult = MsgBox("A new launcher update is available! Would you like to download it?", MsgBoxStyle.YesNo)
             If msgRslt = MsgBoxResult.Yes Then
-                Try
-                    LoadingIcon.Visible = True
-                    GitHubAPI.DownloadFile(latestLauncherRelease.AssetDownloadURL, "Temp\BIONICLE Launcher Installer.exe")
-                Catch
-                End Try
+                NewsPage.Load("https://files.maskofdestiny.com/gms/tlomn/Launcher/Web/PatchNotesLoading.html")
+                GitHubAPI.DownloadFile(latestLauncherRelease.AssetDownloadURL, "Temp\BIONICLE Launcher Installer.exe")
+                NewsPage.Load("https://files.maskofdestiny.com/gms/tlomn/Launcher/Web/PatchNotes.html")
             End If
         End If
     End Sub
