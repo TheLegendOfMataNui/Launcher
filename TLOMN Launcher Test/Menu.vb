@@ -49,19 +49,11 @@ Public Class Form1
         Return (width / scale) & ":" & (height / scale)
     End Function
 
-    Private Async Sub Form1_Load(ByVal sender As System.Object, ByVal e _
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e _
     As System.EventArgs) Handles MyBase.Load
         ' Read the TLOMNLauncher config
         Configuration = New INIFile(LauncherConfigFilename)
 
-        Dim latestLauncherRelease As GitHubRelease = Await GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LauncherRepoIdentifier, False)
-        If latestLauncherRelease IsNot Nothing Then
-            MessageBox.Show("The latest launcher release is called '" & latestLauncherRelease.Name & "' (tag '" & latestLauncherRelease.TagName & "')" & vbNewLine & "Download URL: " & latestLauncherRelease.AssetDownloadURL)
-        Else
-            MessageBox.Show("Could not find any GitHub releases!")
-        End If
-
-        LauncherUpdater.DoUpdateCheck()
         CheckboxBeta()
         CheckboxRebuilt()
 
@@ -550,6 +542,29 @@ Public Class Form1
     End Sub
 
     '----------------------------------------------------------------
+    'Check Launcher version
+    '----------------------------------------------------------------
+
+    Public Async Sub CheckLauncherUpdates()
+        Dim latestLauncherRelease As GitHubRelease = Await GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LauncherRepoIdentifier, False)
+        Dim GitTag As String = latestLauncherRelease.TagName
+        Dim LocalVer As String = My.Computer.FileSystem.ReadAllText("versionL.txt")
+        If GitTag <> LocalVer Then
+            '----------------------------------------------------------------
+            'If version is newer, show download prompt
+            '----------------------------------------------------------------
+            Dim msgRslt As MsgBoxResult = MsgBox("A new launcher update is available! Would you like to download it?", MsgBoxStyle.YesNo)
+            If msgRslt = MsgBoxResult.Yes Then
+                Try
+                    LoadingIcon.Visible = True
+                    GitHubAPI.DownloadFile(latestLauncherRelease.AssetDownloadURL, "Temp\BIONICLE Launcher Installer.exe")
+                Catch
+                End Try
+            End If
+        End If
+    End Sub
+
+    '----------------------------------------------------------------
     'Launch DGVoodoo
     '----------------------------------------------------------------
 
@@ -569,7 +584,7 @@ Public Class Form1
 
     Private Sub PictureBox2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox2.Click
 
-        Process.Start("http://bit.ly/Beavercord")
+        Process.Start("http://bit.ly/LitestoneDiscord")
 
     End Sub
 
@@ -702,4 +717,7 @@ Public Class Form1
 
     End Sub
 
+    Private Sub Form1_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+        CheckLauncherUpdates()
+    End Sub
 End Class

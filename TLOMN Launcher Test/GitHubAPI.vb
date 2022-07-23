@@ -24,7 +24,7 @@ Public Module GitHubAPI
     Public Const LOMNAlphaRepoIdentifier As String = "LOMN-Alpha"
     Public Const LauncherRepoIdentifier As String = "Launcher"
 
-    Private Const UserAgent As String = "TheLegendOfMataNui/Launcher"
+    Private Const UserAgent As String = "TheLegendOfMataNuiLauncher"
 
     Private Async Function SendGetRequestAsync(endpoint As String) As Task(Of String)
         Using client As New System.Net.Http.HttpClient()
@@ -45,6 +45,7 @@ Public Module GitHubAPI
             Using stream As System.IO.Stream = Await client.GetStreamAsync(url)
                 Using fileStream As New System.IO.FileStream(filename, System.IO.FileMode.Create)
                     Await stream.CopyToAsync(fileStream)
+                    Form1.LoadingIcon.Visible = False
                 End Using
             End Using
         End Using

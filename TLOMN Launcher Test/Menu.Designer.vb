@@ -30,6 +30,7 @@ Partial Class Form1
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.News = New System.Windows.Forms.Panel()
+        Me.LoadingIcon = New System.Windows.Forms.PictureBox()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
@@ -40,6 +41,8 @@ Partial Class Form1
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.News.SuspendLayout()
+        CType(Me.LoadingIcon, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -116,10 +119,21 @@ Partial Class Form1
         '
         Me.News.BackColor = System.Drawing.Color.Transparent
         Me.News.BackgroundImage = Global.TLOMN_Launcher_Test.My.Resources.Resources.Offline
+        Me.News.Controls.Add(Me.LoadingIcon)
         Me.News.Location = New System.Drawing.Point(12, 12)
         Me.News.Name = "News"
         Me.News.Size = New System.Drawing.Size(701, 467)
         Me.News.TabIndex = 2
+        '
+        'LoadingIcon
+        '
+        Me.LoadingIcon.Image = Global.TLOMN_Launcher_Test.My.Resources.Resources.Loading
+        Me.LoadingIcon.Location = New System.Drawing.Point(311, 194)
+        Me.LoadingIcon.Name = "LoadingIcon"
+        Me.LoadingIcon.Size = New System.Drawing.Size(151, 128)
+        Me.LoadingIcon.TabIndex = 0
+        Me.LoadingIcon.TabStop = False
+        Me.LoadingIcon.Visible = False
         '
         'Button4
         '
@@ -214,6 +228,8 @@ Partial Class Form1
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.News.ResumeLayout(False)
+        CType(Me.LoadingIcon, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
@@ -236,4 +252,5 @@ Partial Class Form1
     Friend WithEvents CheckBox1 As CheckBox
     Friend WithEvents TestMenu As CheckBox
     Friend WithEvents Button2 As Button
+    Friend WithEvents LoadingIcon As PictureBox
 End Class
