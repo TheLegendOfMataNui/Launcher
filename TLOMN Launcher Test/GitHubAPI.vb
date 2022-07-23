@@ -24,35 +24,35 @@ Public Module GitHubAPI
     Public Const LOMNAlphaRepoIdentifier As String = "LOMN-Alpha"
     Public Const LauncherRepoIdentifier As String = "Launcher"
 
-    Private Function SendGETRequest(endpoint As String) As String
-        Using client As New System.Net.WebClient()
-            ' GitHub asks that tools identify themselves somehow in the user-agent
-            client.Headers.Set(Net.HttpRequestHeader.UserAgent, "TheLegendOfMataNui/Launcher")
+    Private Const UserAgent As String = "TheLegendOfMataNui/Launcher"
 
-            Using stream As System.IO.Stream = client.OpenRead("https://" & GitHubAPIHost & endpoint)
-                Using reader As New System.IO.StreamReader(stream)
-                    Return reader.ReadToEnd()
-                End Using
-            End Using
+    Private Async Function SendGetRequestAsync(endpoint As String) As Task(Of String)
+        Using client As New System.Net.Http.HttpClient()
+            ' GitHub asks that tools identify themselves somehow in the user-agent
+            client.DefaultRequestHeaders.UserAgent.Clear()
+            client.DefaultRequestHeaders.UserAgent.Add(New Http.Headers.ProductInfoHeaderValue(UserAgent, ""))
+
+            Return Await client.GetStringAsync(New Uri("https://" & GitHubAPIHost & endpoint))
         End Using
     End Function
 
-    Public Sub DownloadFile(url As String, filename As String)
-        Using client As New System.Net.WebClient()
+    Public Async Sub DownloadFile(url As String, filename As String)
+        Using client As New System.Net.Http.HttpClient()
             ' GitHub asks that tools identify themselves somehow in the user-agent
-            client.Headers.Set(Net.HttpRequestHeader.UserAgent, "TheLegendOfMataNui/Launcher")
+            client.DefaultRequestHeaders.UserAgent.Clear()
+            client.DefaultRequestHeaders.UserAgent.Add(New Http.Headers.ProductInfoHeaderValue(UserAgent, ""))
 
-            Using stream As System.IO.Stream = client.OpenRead(url)
+            Using stream As System.IO.Stream = Await client.GetStreamAsync(url)
                 Using fileStream As New System.IO.FileStream(filename, System.IO.FileMode.Create)
-                    stream.CopyTo(fileStream)
+                    Await stream.CopyToAsync(fileStream)
                 End Using
             End Using
         End Using
     End Sub
 
-    Public Function GetLatestRelease(owner As String, repo As String, Optional includePrerelease As Boolean = False) As GitHubRelease
+    Public Async Function GetLatestRelease(owner As String, repo As String, Optional includePrerelease As Boolean = False) As Task(Of GitHubRelease)
         ' API information here: https://docs.github.com/en/rest/releases/releases#list-releases
-        Dim response As String = SendGETRequest("/repos/" & owner & "/" & repo & "/releases")
+        Dim response As String = Await SendGetRequestAsync("/repos/" & owner & "/" & repo & "/releases")
 
         Dim json As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(response)
 
