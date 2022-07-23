@@ -1,4 +1,6 @@
-﻿Public Class GitHubRelease
+﻿Imports System.Net
+
+Public Class GitHubRelease
     Public ReadOnly Property TagName As String
     Public ReadOnly Property Name As String
     Public ReadOnly Property AssetDownloadURL As String
@@ -34,6 +36,19 @@ Public Module GitHubAPI
             End Using
         End Using
     End Function
+
+    Public Sub DownloadFile(url As String, filename As String)
+        Using client As New System.Net.WebClient()
+            ' GitHub asks that tools identify themselves somehow in the user-agent
+            client.Headers.Set(Net.HttpRequestHeader.UserAgent, "TheLegendOfMataNui/Launcher")
+
+            Using stream As System.IO.Stream = client.OpenRead(url)
+                Using fileStream As New System.IO.FileStream(filename, System.IO.FileMode.Create)
+                    stream.CopyTo(fileStream)
+                End Using
+            End Using
+        End Using
+    End Sub
 
     Public Function GetLatestRelease(owner As String, repo As String, Optional includePrerelease As Boolean = False) As GitHubRelease
         ' API information here: https://docs.github.com/en/rest/releases/releases#list-releases
