@@ -252,7 +252,7 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Resources\Temp\PLACEHOLDER">
+    <None Include="Temp\PLACEHOLDER">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TLOMN Launcher Test_1_TemporaryKey.pfx" />
@@ -302,7 +302,7 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\version.txt">
+    <Content Include="version.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\ButtonRebuilt.png" />

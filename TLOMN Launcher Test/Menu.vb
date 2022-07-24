@@ -225,8 +225,8 @@ Public Class Form1
                     ' Download the game
                     Try
                         My.Computer.Network.DownloadFile("http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/setup.exe",
-            "Resources\Temp\setup.exe", "", "", True, 1000, True)
-                        Process.Start("Resources\Temp\setup.exe").WaitForExit()
+            "Temp\setup.exe", "", "", True, 1000, True)
+                        Process.Start("Temp\setup.exe").WaitForExit()
 
                         ' Ask user where they installed
                         Dim browser As New OpenFileDialog()
@@ -278,8 +278,8 @@ Public Class Form1
                     ' Download the game
                     Try
                         My.Computer.Network.DownloadFile("http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/setupbeta.exe",
-            "Resources\Temp\setupbeta.exe", "", "", True, 1000, True)
-                        Process.Start("Resources\Temp\setupbeta.exe").WaitForExit()
+            "Temp\setupbeta.exe", "", "", True, 1000, True)
+                        Process.Start("Temp\setupbeta.exe").WaitForExit()
 
                         ' Ask user where they installed
                         Dim browser As New OpenFileDialog()
@@ -332,8 +332,8 @@ Public Class Form1
                     ' Download the game
                     Try
                         My.Computer.Network.DownloadFile("http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/setuprebuilt.exe",
-            "Resources\Temp\setuprebuilt.exe", "", "", True, 1000, True)
-                        Process.Start("Resources\Temp\setuprebuilt.exe").WaitForExit()
+            "Temp\setuprebuilt.exe", "", "", True, 1000, True)
+                        Process.Start("Temp\setuprebuilt.exe").WaitForExit()
 
                         ' Ask user where they installed
                         Dim browser As New OpenFileDialog()
@@ -392,7 +392,7 @@ Public Class Form1
                     '----------------------------------------------------------------
                 ElseIf msgRslt = MsgBoxResult.No Then
                     Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
-                    My.Computer.FileSystem.DeleteDirectory("Resources\Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
+                    My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
                     Me.Close()
                 End If
             End If
@@ -439,7 +439,7 @@ Public Class Form1
                     '----------------------------------------------------------------
                 ElseIf msgRslt = MsgBoxResult.No Then
                     Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
-                    My.Computer.FileSystem.DeleteDirectory("Resources\Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
+                    My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
                     Me.Close()
                 End If
             End If
@@ -486,7 +486,7 @@ Public Class Form1
                     '----------------------------------------------------------------
                 ElseIf msgRslt = MsgBoxResult.No Then
                     Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
-                    My.Computer.FileSystem.DeleteDirectory("Resources\Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
+                    My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
                     Me.Close()
                 End If
             End If
@@ -518,8 +518,8 @@ Public Class Form1
                 Dim msgRslt As MsgBoxResult = MsgBox("A new launcher update is available! Would you like to download it?", MsgBoxStyle.YesNo)
                 If msgRslt = MsgBoxResult.Yes Then
                     NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
-                    GitHubAPI.DownloadFile(LatestLauncherRelease.AssetDownloadURL, "Resources\Temp\BIONICLE Launcher Installer.exe")
-                    Process.Start("Resources\Temp\BIONICLE Launcher Installer.exe")
+                    GitHubAPI.DownloadFile(LatestLauncherRelease.AssetDownloadURL, "Temp\BIONICLE Launcher Installer.exe")
+                    Process.Start("Temp\BIONICLE Launcher Installer.exe")
                     Me.Close()
                 End If
             End If
