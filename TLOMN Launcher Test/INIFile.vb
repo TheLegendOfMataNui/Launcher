@@ -51,17 +51,20 @@ Public Class INIFile
     End Sub
 
     Public Sub Write(path As String)
-        Using writer As New StreamWriter(path)
-            For Each section As INISection In Sections.Values
-                If Not section.Name = "" Then
-                    writer.WriteLine("[" + section.Name + "]")
-                End If
+        Try
+            Using writer As New StreamWriter(path)
+                For Each section As INISection In Sections.Values
+                    If Not section.Name = "" Then
+                        writer.WriteLine("[" + section.Name + "]")
+                    End If
 
-                For Each value As KeyValuePair(Of String, String) In section.Entries
-                    writer.WriteLine(value.Key + "=" + value.Value)
+                    For Each value As KeyValuePair(Of String, String) In section.Entries
+                        writer.WriteLine(value.Key + "=" + value.Value)
+                    Next
                 Next
-            Next
-        End Using
+            End Using
+        Catch
+        End Try
     End Sub
 
     Public Function GetString(section As String, key As String, Optional defaultValue As String = "") As String
