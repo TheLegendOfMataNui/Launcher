@@ -1,6 +1,7 @@
 ﻿Imports CefSharp.WinForms
 Imports CefSharp
 Imports System.Net
+Imports System.IO
 
 Public Class Form1
 
@@ -11,10 +12,6 @@ Public Class Form1
     Private Const dgVoodooConfigFilename As String = "dgVoodoo.conf"
     Private Const LauncherConfigFilename As String = "TLOMNLauncher.ini"
     Private Const BionicleConfigFilename As String = "Bionicle.ini"
-
-    Private ReadOnly AlphaDefaultFilename As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\LEGO Media\LEGO Bionicle\LEGO Bionicle.exe"
-    Private ReadOnly BetaDefaultFilename As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\LEGO Media\LEGO Bionicle (Beta)\LEGO Bionicle.exe"
-    Private ReadOnly RebuiltDefaultFilename As String = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\LEGO Media\LEGO Bionicle (Rebuilt)\LEGO Bionicle.exe"
 
     Private IgnoreUI As Boolean = True
 
@@ -201,53 +198,71 @@ Public Class Form1
     '----------------------------------------------------------------
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-
-        Dim gameFilename As String = Configuration.GetString("Alpha", "EXEName", "<none>")
-        If gameFilename = "<none>" Then
-            If System.IO.File.Exists(AlphaDefaultFilename) Then
-                gameFilename = AlphaDefaultFilename
-                Configuration.SetString("Alpha", "EXEName", gameFilename)
-                ApplyGameOptions()
-            Else
+        'Check for game
+        Try
+            Dim LatestAlphaRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNAlphaRepoIdentifier, False)
+            Dim gameFilename As String = Configuration.GetString("Alpha", "EXEName", "<none>")
+            If gameFilename = "none" Or Not My.Computer.FileSystem.FileExists(gameFilename) Then
                 Dim choice As DialogResult
                 choice = MessageBox.Show("Could not find the game. Is it downloaded?", "The Legend of Mata Nui Alpha", MessageBoxButtons.YesNoCancel)
                 If choice = DialogResult.Yes Then
-                    ' Browse for the game
+                    'Browse for the game
                     Dim browser As New OpenFileDialog()
                     If browser.ShowDialog() = DialogResult.OK Then
                         gameFilename = browser.FileName
                         Configuration.SetString("Alpha", "EXEName", gameFilename)
-                        ApplyGameOptions()
-                    Else
-                        Exit Sub
                     End If
                 ElseIf choice = DialogResult.No Then
-                    ' Download the game
-                    Try
-                        My.Computer.Network.DownloadFile("http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/setup.exe",
-            "Temp\setup.exe", "", "", True, 1000, True)
-                        Process.Start("Temp\setup.exe").WaitForExit()
-
-                        ' Ask user where they installed
-                        Dim browser As New OpenFileDialog()
-                        If browser.ShowDialog() = DialogResult.OK Then
-                            gameFilename = browser.FileName
-                            Configuration.SetString("Alpha", "EXEName", gameFilename)
-                            ApplyGameOptions()
-                        Else
-                            Exit Sub
-                        End If
-                        Exit Sub
-                    Catch
-                    End Try
-                Else
-                    ' User canceled
-                    Exit Sub
+                    'Download the game
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
+                    GitHubAPI.DownloadFile(LatestAlphaRelease.AssetDownloadURL, "Temp\Setup.exe")
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotes.html")
+                    Process.Start("Temp\Setup.exe").WaitForExit()
+                    gameFilename = My.Computer.FileSystem.ReadAllText("Temp\AlphaDir.txt")
+                    Configuration.SetString("Alpha", "EXEName", gameFilename)
                 End If
             End If
-            Configuration.Write(LauncherConfigFilename)
-        End If
-        DoPatch()
+            DoPatchAlpha()
+        Catch
+        End Try
+    End Sub
+
+    Public Sub DoPatchAlpha()
+        Try
+            'Check for updates
+            Dim LatestAlphaRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNAlphaRepoIdentifier, False)
+            Dim gameFilename As String = Configuration.GetString("Alpha", "EXEName", "<none>")
+            Dim GameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Alpha", "EXEName", "<none>"))
+            Dim GitTag As String = LatestAlphaRelease.TagName
+            Dim LocalVer As String = ""
+            LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "version.txt"))
+            If GitTag <> LocalVer Then
+                'If version is mismatched, show download prompt                
+                Dim choice As MsgBoxResult = MsgBox("A new update is available! Would you like to download it?", MsgBoxStyle.YesNo)
+                If choice = MsgBoxResult.Yes Then
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
+                    GitHubAPI.DownloadFile(LatestAlphaRelease.AssetDownloadURL, "Temp\Setup.exe")
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotes.html")
+                    Process.Start("Temp\Setup.exe").WaitForExit()
+                    gameFilename = My.Computer.FileSystem.ReadAllText("Temp\AlphaDir.txt")
+                    Configuration.SetString("Alpha", "EXEName", gameFilename)
+                End If
+            End If
+        Catch
+        End Try
+        LaunchAlpha()
+    End Sub
+
+    Public Sub LaunchAlpha()
+        'Launch game, write config, & cleanup
+        ApplyGameOptions()
+        Configuration.Write(LauncherConfigFilename)
+        Dim directoryName As String = "Temp"
+        For Each deleteFile In Directory.GetFiles(directoryName, "*.*", SearchOption.TopDirectoryOnly)
+            File.Delete(deleteFile)
+        Next
+        Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
+        Me.Close()
     End Sub
 
     '----------------------------------------------------------------
@@ -255,53 +270,71 @@ Public Class Form1
     '----------------------------------------------------------------
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        Dim gameFilename As String = Configuration.GetString("Beta", "EXEName", "<none>")
-        If gameFilename = "<none>" Then
-            If System.IO.File.Exists(BetaDefaultFilename) Then
-                gameFilename = BetaDefaultFilename
-                Configuration.SetString("Beta", "EXEName", gameFilename)
-                ApplyGameOptions()
-            Else
+        'Check for game
+        Try
+            Dim LatestBetaRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNBetaRepoIdentifier, False)
+            Dim gameFilename As String = Configuration.GetString("Beta", "EXEName", "<none>")
+            If gameFilename = "none" Or Not My.Computer.FileSystem.FileExists(gameFilename) Then
                 Dim choice As DialogResult
                 choice = MessageBox.Show("Could not find the game. Is it downloaded?", "The Legend of Mata Nui Beta", MessageBoxButtons.YesNoCancel)
                 If choice = DialogResult.Yes Then
-                    ' Browse for the game
+                    'Browse for the game
                     Dim browser As New OpenFileDialog()
                     If browser.ShowDialog() = DialogResult.OK Then
                         gameFilename = browser.FileName
                         Configuration.SetString("Beta", "EXEName", gameFilename)
-                        ApplyGameOptions()
-                    Else
-                        Exit Sub
                     End If
                 ElseIf choice = DialogResult.No Then
-                    ' Download the game
-                    Try
-                        My.Computer.Network.DownloadFile("http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/setupbeta.exe",
-            "Temp\setupbeta.exe", "", "", True, 1000, True)
-                        Process.Start("Temp\setupbeta.exe").WaitForExit()
-
-                        ' Ask user where they installed
-                        Dim browser As New OpenFileDialog()
-                        If browser.ShowDialog() = DialogResult.OK Then
-                            gameFilename = browser.FileName
-                            Configuration.SetString("Beta", "EXEName", gameFilename)
-                            ApplyGameOptions()
-                        Else
-                            Exit Sub
-                        End If
-
-                    Catch
-                        Exit Sub
-                    End Try
-                Else
-                    ' User canceled
-                    Exit Sub
+                    'Download the game
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
+                    GitHubAPI.DownloadFile(LatestBetaRelease.AssetDownloadURL, "Temp\Setup.exe")
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotes.html")
+                    Process.Start("Temp\Setup.exe").WaitForExit()
+                    gameFilename = My.Computer.FileSystem.ReadAllText("Temp\BetaDir.txt")
+                    Configuration.SetString("Beta", "EXEName", gameFilename)
                 End If
             End If
-            Configuration.Write(LauncherConfigFilename)
-        End If
-        DoPatchBeta()
+            DoPatchBeta()
+        Catch
+        End Try
+    End Sub
+
+    Public Sub DoPatchBeta()
+        Try
+            'Check for updates
+            Dim LatestBetaRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNBetaRepoIdentifier, False)
+            Dim gameFilename As String = Configuration.GetString("Beta", "EXEName", "<none>")
+            Dim GameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Beta", "EXEName", "<none>"))
+            Dim GitTag As String = LatestBetaRelease.TagName
+            Dim LocalVer As String = ""
+            LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "version.txt"))
+            If GitTag <> LocalVer Then
+                'If version is mismatched, show download prompt                
+                Dim choice As MsgBoxResult = MsgBox("A new update is available! Would you like to download it?", MsgBoxStyle.YesNo)
+                If choice = MsgBoxResult.Yes Then
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
+                    GitHubAPI.DownloadFile(LatestBetaRelease.AssetDownloadURL, "Temp\Setup.exe")
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotes.html")
+                    Process.Start("Temp\Setup.exe").WaitForExit()
+                    gameFilename = My.Computer.FileSystem.ReadAllText("Temp\BetaDir.txt")
+                    Configuration.SetString("Beta", "EXEName", gameFilename)
+                End If
+            End If
+        Catch
+        End Try
+        LaunchBeta()
+    End Sub
+
+    Public Sub LaunchBeta()
+        'Launch game, write config, & cleanup
+        ApplyGameOptions()
+        Configuration.Write(LauncherConfigFilename)
+        Dim directoryName As String = "Temp"
+        For Each deleteFile In Directory.GetFiles(directoryName, "*.*", SearchOption.TopDirectoryOnly)
+            File.Delete(deleteFile)
+        Next
+        Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
+        Me.Close()
     End Sub
 
     '----------------------------------------------------------------
@@ -309,192 +342,71 @@ Public Class Form1
     '----------------------------------------------------------------
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Dim gameFilename As String = Configuration.GetString("Rebuilt", "EXEName", "<none>")
-        If gameFilename = "<none>" Then
-            If System.IO.File.Exists(RebuiltDefaultFilename) Then
-                gameFilename = RebuiltDefaultFilename
-                Configuration.SetString("Rebuilt", "EXEName", gameFilename)
-                ApplyGameOptions()
-            Else
+        'Check for game
+        Try
+            Dim LatestRebuiltRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNRebuiltRepoIdentifier, False)
+            Dim gameFilename As String = Configuration.GetString("Rebuilt", "EXEName", "<none>")
+            If gameFilename = "none" Or Not My.Computer.FileSystem.FileExists(gameFilename) Then
                 Dim choice As DialogResult
-                choice = MessageBox.Show("Could not find the game. Is it downloaded?", "The Legend of Mata Nui Beta", MessageBoxButtons.YesNoCancel)
+                choice = MessageBox.Show("Could not find the game. Is it downloaded?", "The Legend of Mata Nui Rebuilt", MessageBoxButtons.YesNoCancel)
                 If choice = DialogResult.Yes Then
-                    ' Browse for the game
+                    'Browse for the game
                     Dim browser As New OpenFileDialog()
                     If browser.ShowDialog() = DialogResult.OK Then
                         gameFilename = browser.FileName
                         Configuration.SetString("Rebuilt", "EXEName", gameFilename)
-                        ApplyGameOptions()
-                    Else
-                        Exit Sub
                     End If
                 ElseIf choice = DialogResult.No Then
-                    ' Download the game
-                    Try
-                        My.Computer.Network.DownloadFile("http://biomediaproject.com/bmp/files/gms/tlomn/Launcher/setuprebuilt.exe",
-            "Temp\setuprebuilt.exe", "", "", True, 1000, True)
-                        Process.Start("Temp\setuprebuilt.exe").WaitForExit()
-
-                        ' Ask user where they installed
-                        Dim browser As New OpenFileDialog()
-                        If browser.ShowDialog() = DialogResult.OK Then
-                            gameFilename = browser.FileName
-                            Configuration.SetString("Rebuilt", "EXEName", gameFilename)
-                            ApplyGameOptions()
-                        Else
-                            Exit Sub
-                        End If
-
-                    Catch
-                        Exit Sub
-                    End Try
-                Else
-                    ' User canceled
-                    Exit Sub
-                End If
-            End If
-            Configuration.Write(LauncherConfigFilename)
-        End If
-        DoPatchRebuilt()
-    End Sub
-
-    '----------------------------------------------------------------
-    'Check Patch Version (Alpha)
-    '----------------------------------------------------------------
-
-    Public Sub DoPatch()
-        '----------------------------------------------------------------
-        'Check patch version
-        '----------------------------------------------------------------
-        Dim GameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Alpha", "EXEName", "<none>"))
-        Dim PatchFilename As String = System.IO.Path.Combine(GameFolder, "Patch.exe")
-        Try
-            Dim LatestAlphaRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNAlphaRepoIdentifier, False)
-            Dim GitTag As String = LatestAlphaRelease.TagName
-            Dim LocalVer As String = ""
-            If System.IO.File.Exists(System.IO.Path.Combine(GameFolder, "version.txt")) Then
-                LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "version.txt"))
-            End If
-            If GitTag <> LocalVer Then
-                '----------------------------------------------------------------
-                'If version is newer, show download prompt
-                '----------------------------------------------------------------
-                Dim msgRslt As MsgBoxResult = MsgBox("A new alpha patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
-                If msgRslt = MsgBoxResult.Yes Then
+                    'Download the game
                     NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
-                    GitHubAPI.DownloadFile(LatestAlphaRelease.AssetDownloadURL, PatchFilename)
-                    Process.Start(PatchFilename).WaitForExit()
-                    Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
-                    My.Computer.FileSystem.DeleteFile(PatchFilename)
-                    Me.Close()
-                    '----------------------------------------------------------------
-                    'If patch declined, run game anyways
-                    '----------------------------------------------------------------
-                ElseIf msgRslt = MsgBoxResult.No Then
-                    Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
-                    My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
-                    Me.Close()
+                    GitHubAPI.DownloadFile(LatestRebuiltRelease.AssetDownloadURL, "Temp\Setup.exe")
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotes.html")
+                    Process.Start("Temp\Setup.exe").WaitForExit()
+                    gameFilename = My.Computer.FileSystem.ReadAllText("Temp\RebuiltDir.txt")
+                    Configuration.SetString("Rebuilt", "EXEName", gameFilename)
                 End If
             End If
+            DoPatchRebuilt()
         Catch
-            Process.Start(Configuration.GetString("Alpha", "EXEName", "<none>"))
-            Me.Close()
-            Exit Sub
         End Try
     End Sub
-
-    '----------------------------------------------------------------
-    'Check Patch Version (Beta)
-    '----------------------------------------------------------------
-
-    Public Sub DoPatchBeta()
-        '----------------------------------------------------------------
-        'Check patch version
-        '----------------------------------------------------------------
-        Dim GameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Beta", "EXEName", "<none>"))
-        Dim PatchFilename As String = System.IO.Path.Combine(GameFolder, "Patch.exe")
-        Try
-            Dim LatestBetaRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNBetaRepoIdentifier, False)
-            Dim GitTag As String = LatestBetaRelease.TagName
-            Dim LocalVer As String = ""
-            If System.IO.File.Exists(System.IO.Path.Combine(GameFolder, "version.txt")) Then
-                LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "version.txt"))
-            ElseIf System.IO.File.Exists(System.IO.Path.Combine(GameFolder, "versionbeta.txt")) Then
-                LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "versionbeta.txt"))
-            End If
-            If GitTag <> LocalVer Then
-                '----------------------------------------------------------------
-                'If version is newer, show download prompt
-                '----------------------------------------------------------------
-                Dim msgRslt As MsgBoxResult = MsgBox("A new beta patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
-                If msgRslt = MsgBoxResult.Yes Then
-                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
-                    GitHubAPI.DownloadFile(LatestBetaRelease.AssetDownloadURL, PatchFilename)
-                    Process.Start(PatchFilename).WaitForExit()
-                    Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
-                    My.Computer.FileSystem.DeleteFile(PatchFilename)
-                    Me.Close()
-                    '----------------------------------------------------------------
-                    'If patch declined, run game anyways
-                    '----------------------------------------------------------------
-                ElseIf msgRslt = MsgBoxResult.No Then
-                    Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
-                    My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
-                    Me.Close()
-                End If
-            End If
-        Catch
-            Process.Start(Configuration.GetString("Beta", "EXEName", "<none>"))
-            Me.Close()
-            Exit Sub
-        End Try
-    End Sub
-
-    '----------------------------------------------------------------
-    'Check Patch Version (Rebuilt)
-    '----------------------------------------------------------------
 
     Public Sub DoPatchRebuilt()
-        '----------------------------------------------------------------
-        'Check patch version
-        '----------------------------------------------------------------
-        Dim GameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
-        Dim PatchFilename As String = System.IO.Path.Combine(GameFolder, "Patch.exe")
         Try
+            'Check for updates
             Dim LatestRebuiltRelease As GitHubRelease = GitHubAPI.GetLatestRelease(GitHubAPI.OrganizationIdentifier, GitHubAPI.LOMNRebuiltRepoIdentifier, False)
+            Dim gameFilename As String = Configuration.GetString("Rebuilt", "EXEName", "<none>")
+            Dim GameFolder As String = System.IO.Path.GetDirectoryName(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
             Dim GitTag As String = LatestRebuiltRelease.TagName
             Dim LocalVer As String = ""
-            If System.IO.File.Exists(System.IO.Path.Combine(GameFolder, "version.txt")) Then
-                LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "version.txt"))
-            ElseIf System.IO.File.Exists(System.IO.Path.Combine(GameFolder, "versionop.txt")) Then
-                LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "versionop.txt"))
-            End If
+            LocalVer = My.Computer.FileSystem.ReadAllText(System.IO.Path.Combine(GameFolder, "version.txt"))
             If GitTag <> LocalVer Then
-                '----------------------------------------------------------------
-                'If version is newer, show download prompt
-                '----------------------------------------------------------------
-                Dim msgRslt As MsgBoxResult = MsgBox("A new REBUILT patch is available! Would you like to download it?", MsgBoxStyle.YesNo)
-                If msgRslt = MsgBoxResult.Yes Then
+                'If version is mismatched, show download prompt                
+                Dim choice As MsgBoxResult = MsgBox("A new update is available! Would you like to download it?", MsgBoxStyle.YesNo)
+                If choice = MsgBoxResult.Yes Then
                     NewsPage.Load("https://810nicleday.com/LOMN/PatchNotesLoading.html")
-                    GitHubAPI.DownloadFile(LatestRebuiltRelease.AssetDownloadURL, PatchFilename)
-                    Process.Start(PatchFilename).WaitForExit()
-                    Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
-                    My.Computer.FileSystem.DeleteFile(PatchFilename)
-                    Me.Close()
-                    '----------------------------------------------------------------
-                    'If patch declined, run game anyways
-                    '----------------------------------------------------------------
-                ElseIf msgRslt = MsgBoxResult.No Then
-                    Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
-                    My.Computer.FileSystem.DeleteDirectory("Temp", FileIO.DeleteDirectoryOption.DeleteAllContents)
-                    Me.Close()
+                    GitHubAPI.DownloadFile(LatestRebuiltRelease.AssetDownloadURL, "Temp\Setup.exe")
+                    NewsPage.Load("https://810nicleday.com/LOMN/PatchNotes.html")
+                    Process.Start("Temp\Setup.exe").WaitForExit()
+                    gameFilename = My.Computer.FileSystem.ReadAllText("Temp\RebuiltDir.txt")
+                    Configuration.SetString("Rebuilt", "EXEName", gameFilename)
                 End If
             End If
         Catch
-            Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
-            Me.Close()
-            Exit Sub
         End Try
+        LaunchRebuilt()
+    End Sub
+
+    Public Sub LaunchRebuilt()
+        'Launch game, write config, & cleanup
+        ApplyGameOptions()
+        Configuration.Write(LauncherConfigFilename)
+        Dim directoryName As String = "Temp"
+        For Each deleteFile In Directory.GetFiles(directoryName, "*.*", SearchOption.TopDirectoryOnly)
+            File.Delete(deleteFile)
+        Next
+        Process.Start(Configuration.GetString("Rebuilt", "EXEName", "<none>"))
+        Me.Close()
     End Sub
 
     '----------------------------------------------------------------
