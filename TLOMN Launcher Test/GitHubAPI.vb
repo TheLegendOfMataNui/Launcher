@@ -25,10 +25,20 @@ Public Module GitHubAPI
     Public Const LOMNAlphaRepoIdentifier As String = "LOMN-Alpha"
     Public Const LauncherRepoIdentifier As String = "Launcher"
 
+#If DEBUG Then
+    Public PersonalAccessUsername As String = ""
+    Public PersonalAccessToken As String = ""
+#End If
+
     Private Function SendGETRequest(endpoint As String) As String
         Using client As New System.Net.WebClient()
             ' GitHub asks that tools identify themselves somehow in the user-agent
             client.Headers.Set(Net.HttpRequestHeader.UserAgent, "TheLegendOfMataNui/Launcher")
+#If DEBUG Then
+            If PersonalAccessUsername.Length > 0 AndAlso PersonalAccessToken.Length > 0 Then
+                client.Headers.Set(Net.HttpRequestHeader.Authorization, "Basic " & Convert.ToBase64String(Text.Encoding.ASCII.GetBytes(PersonalAccessUsername & ":" & PersonalAccessToken)))
+            End If
+#End If
 
             Using stream As System.IO.Stream = client.OpenRead("https://" & GitHubAPIHost & endpoint)
                 GitHubAPI.LogRateLimits(client.ResponseHeaders)
@@ -43,6 +53,11 @@ Public Module GitHubAPI
         Using client As New System.Net.WebClient()
             ' GitHub asks that tools identify themselves somehow in the user-agent
             client.Headers.Set(Net.HttpRequestHeader.UserAgent, "TheLegendOfMataNui/Launcher")
+#If DEBUG Then
+            If PersonalAccessUsername.Length > 0 AndAlso PersonalAccessToken.Length > 0 Then
+                client.Headers.Set(Net.HttpRequestHeader.Authorization, "Basic " & Convert.ToBase64String(Text.Encoding.ASCII.GetBytes(PersonalAccessUsername & ":" & PersonalAccessToken)))
+            End If
+#End If
 
             Using stream As System.IO.Stream = client.OpenRead(url)
                 GitHubAPI.LogRateLimits(client.ResponseHeaders)
@@ -88,6 +103,6 @@ Public Module GitHubAPI
         Dim limit As String = responseHeaders.Get("x-ratelimit-limit")
         Dim remaining As String = responseHeaders.Get("x-ratelimit-remaining")
         Dim used As String = responseHeaders.Get("x-ratelimit-used")
-        System.Diagnostics.Debug.WriteLine("GitHubt API: " & vbNewLine & "  Limit: " & limit & vbNewLine & " Remaining: " & remaining & vbNewLine & "  Used: " & used & vbNewLine)
+        System.Diagnostics.Debug.WriteLine("GitHubt API: " & vbNewLine & "  Limit: " & limit & vbNewLine & "  Remaining: " & remaining & vbNewLine & "  Used: " & used & vbNewLine)
     End Sub
 End Module
