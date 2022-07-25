@@ -103,6 +103,6 @@ Public Module GitHubAPI
         Dim limit As String = responseHeaders.Get("x-ratelimit-limit")
         Dim remaining As String = responseHeaders.Get("x-ratelimit-remaining")
         Dim used As String = responseHeaders.Get("x-ratelimit-used")
-        System.Diagnostics.Debug.WriteLine("GitHubt API: " & vbNewLine & "  Limit: " & limit & vbNewLine & "  Remaining: " & remaining & vbNewLine & "  Used: " & used & vbNewLine)
+        System.Diagnostics.Debug.WriteLine("GitHub API: " & vbNewLine & "  Limit: " & limit & vbNewLine & "  Remaining: " & remaining & vbNewLine & "  Used: " & used & vbNewLine)
     End Sub
 End Module
