@@ -31,6 +31,7 @@ Public Module GitHubAPI
             client.Headers.Set(Net.HttpRequestHeader.UserAgent, "TheLegendOfMataNui/Launcher")
 
             Using stream As System.IO.Stream = client.OpenRead("https://" & GitHubAPIHost & endpoint)
+                GitHubAPI.LogRateLimits(client.ResponseHeaders)
                 Using reader As New System.IO.StreamReader(stream)
                     Return reader.ReadToEnd()
                 End Using
@@ -44,6 +45,7 @@ Public Module GitHubAPI
             client.Headers.Set(Net.HttpRequestHeader.UserAgent, "TheLegendOfMataNui/Launcher")
 
             Using stream As System.IO.Stream = client.OpenRead(url)
+                GitHubAPI.LogRateLimits(client.ResponseHeaders)
                 Using fileStream As New System.IO.FileStream(filename, System.IO.FileMode.Create)
                     stream.CopyTo(fileStream)
                 End Using
@@ -81,4 +83,11 @@ Public Module GitHubAPI
 
         Return Nothing
     End Function
+
+    Private Sub LogRateLimits(responseHeaders As WebHeaderCollection)
+        Dim limit As String = responseHeaders.Get("x-ratelimit-limit")
+        Dim remaining As String = responseHeaders.Get("x-ratelimit-remaining")
+        Dim used As String = responseHeaders.Get("x-ratelimit-used")
+        System.Diagnostics.Debug.WriteLine("GitHubt API: " & vbNewLine & "  Limit: " & limit & vbNewLine & " Remaining: " & remaining & vbNewLine & "  Used: " & used & vbNewLine)
+    End Sub
 End Module
