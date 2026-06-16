@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("BIONICLE The Legend of Mata Nui Launcher")>
 <Assembly: AssemblyDescription("All in one launcher/patcher program for BIONICLE The Legend of Mata Nui")>
-<Assembly: AssemblyCompany("The Beaverhouse")>
-<Assembly: AssemblyProduct("TLOMN Launcher")>
-<Assembly: AssemblyCopyright("Copyright ©  2018")>
+<Assembly: AssemblyCompany("Litestone Studios")>
+<Assembly: AssemblyProduct("LOMN Launcher")>
+<Assembly: AssemblyCopyright("Copyright ©2026")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
