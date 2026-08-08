@@ -17,7 +17,7 @@ Public Class INIFile
         End If
 
         Using reader As New StreamReader(path)
-            Dim currentSection As INISection = New INISection("")
+            Dim currentSection As New INISection("")
             Sections.Add("", currentSection)
 
             While reader.EndOfStream = False
