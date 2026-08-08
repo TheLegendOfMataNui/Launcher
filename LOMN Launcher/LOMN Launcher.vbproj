@@ -126,14 +126,8 @@
     <ManifestCertificateThumbprint>1C961437C9DAAF28078B92C096CE4831F06A1264</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>TLOMN Launcher Test_1_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
     <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup />
-  <PropertyGroup />
   <PropertyGroup>
     <TargetZone>Internet</TargetZone>
   </PropertyGroup>
